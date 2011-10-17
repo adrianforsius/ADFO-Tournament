@@ -80,10 +80,10 @@ foreach($tournament[0] as $tourindex => $bracketInfo){
 	if($this->session->userdata('logged_in')){
 		echo
 		'
-				<a href="'.base_url().'tour_controller/supervise_tournament/'.$bracketInfo['arena'].'">Ansök till turneringen</a>
+			<a href="'.base_url().'tour_controller/load_apply_to_tournament/'.$bracketInfo['arena'].'">Ansök till turneringen</a>
 		';
 		if($userdata['authority'] == 5){
-			echo '<a class="supervise" href="'.base_url().'tour_controller/supervise_tournament/'.$bracketInfo['arena'].'">Administrera turnering</a>';
+			echo '<a class="supervise" href="'.base_url().'tour_controller/load_supervise_tournament/'.$bracketInfo['arena'].'">Administrera turnering</a>';
 		}
 	}
 	echo

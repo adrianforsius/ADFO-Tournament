@@ -205,6 +205,31 @@ class Tour_model extends CI_Model {
 		return $bracket[0][0]['arena'];
 	}
 	
+	function get_teams_by_user_and_size($size){
+		$sql = 
+		'
+			SELECT team.*
+			FROM
+			(
+			SELECT team.*, COUNT(team.name) AS team_size
+			FROM team, user__register__team, user
+			WHERE team.id = user__register__team.team_id
+				AND user__register__team.user_id = user.id
+			GROUP BY team.name
+			HAVING team_size = '.$size.'
+			) AS team, user, user__register__team
+			WHERE team.id = user__register__team.team_id
+				AND user__register__team.user_id = user.id
+				AND user.id = '.$this->session->userdata('id').'
+		';
+		$query = $this->db->query($sql);
+		$teamName = $query->result_array();
+		if(!empty($teamName)){
+			return $teamName;
+		}
+		return false;
+	}
+	
 	function get_teams_by_user(){
 		$sql = 
 		'
@@ -242,10 +267,10 @@ class Tour_model extends CI_Model {
 	function get_team_member($id){
 		$sql =
 		'
-			SELECT *
-			FROM user__register__team, user
-			WHERE user__register__team.user_id = user.id;
-			WHERE team_id = '.$id.'
+			SELECT user.name, user.id, urt.officer
+			FROM user__register__team AS urt, user
+			WHERE urt.user_id = user.id
+				AND urt.team_id ='.$id.'
 		';
 		$query = $this->db->query($sql);
 		$data = $query->result_array();
@@ -278,7 +303,7 @@ class Tour_model extends CI_Model {
 				WHERE bracket.id = team__attend__bracket.bracket_id
 					AND team__attend__bracket.team_id = team.id
 					AND bracket.id = '.$activeBracket[0]['id'].'
-					AND team__attend__bracket.position IS NULL
+					AND team__attend__bracket.position = 0
 				ORDER BY created ASC
 			';
 			$query = $this->db->query($sql);
@@ -309,7 +334,7 @@ class Tour_model extends CI_Model {
 				WHERE bracket.id = team__attend__bracket.bracket_id
 					AND team__attend__bracket.team_id = team.id
 					AND bracket.id = '.$activeBracket[0]['id'].'
-					AND team__attend__bracket.position IS NOT NULL
+					AND team__attend__bracket.position > 0
 				ORDER BY team__attend__bracket.position ASC
 			';
 			$query = $this->db->query($sql);
@@ -387,7 +412,7 @@ class Tour_model extends CI_Model {
 			WHERE bracket.id = team__attend__bracket.bracket_id
 				AND team__attend__bracket.team_id = team.id
 				AND bracket.id = '.$bracketId.'
-				AND team__attend__bracket.position IS NOT NULL
+				AND team__attend__bracket.position > 0
 			ORDER BY team__attend__bracket.position ASC
 			
 		';
@@ -417,7 +442,7 @@ class Tour_model extends CI_Model {
 				WHERE bracket.id = team__attend__bracket.bracket_id
 					AND team__attend__bracket.team_id = team.id
 					AND bracket.id = '.$bracket['id'].'
-					AND team__attend__bracket.position IS NOT NULL
+					AND team__attend__bracket.position > 0
 				ORDER BY team__attend__bracket.position ASC
 				
 			';
@@ -467,18 +492,47 @@ class Tour_model extends CI_Model {
 	 *  return bool
 	 */
 	function sign_up_team_to_bracket(){
-		$data_to_be_inserted = array
-									(
-										'team_id' =>  $this->input->post('team'),
-										'bracket_id' =>  $this->input->post('bracketId'),
-										'signup' =>  $this->input->post('signUp'),
-										'current' =>  $this->input->post('current'),
-									);
+		$data = array
+						(
+							'team_id' =>  $this->input->post('tourTeam'),
+							'bracket_id' =>  $this->input->post('tourBracketId'),
+							'position' => 0,
+						);
 		
-		if($this->db->insert('bracket__attend__bracket', $data_to_be_inserted)){
-			return true;
+		$this->db->where($data);
+		$query = $this->db->get_where('team__attend__bracket');
+		if (!$query->num_rows()) {
+			$this->db->insert('team__attend__bracket', $data);
 		}
 		return false;
+	}
+	
+	function sign_up_player_to_bracket(){
+		$userInfo = $this->session();
+		$sql =
+		'
+			SELECT *
+			FROM user__register__team
+			WHERE id='.$userInfo['id'].'
+				AND player=1
+		';
+		$query = $this->db->query($sql);
+		$teamInfo = $query->result_array();
+		
+		$data = array
+						(
+							'team_id' =>  $teamInfo['id'],
+							'bracket_id' =>  $this->input->post('tourBracketId'),
+							'position' => 0,
+						);
+		
+		$this->db->where($data);
+		$query = $this->db->get_where('team__attend__bracket');
+		if (!$query->num_rows()) {
+			$this->db->insert('team__attend__bracket', $data);
+		}
+		return false;
+		
 	}
 
 	/**

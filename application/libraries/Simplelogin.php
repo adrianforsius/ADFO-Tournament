@@ -84,6 +84,22 @@ class Simplelogin{
 			}
 			$user_id = $this->CI->db->insert_id();
 			
+			$sql =
+			'
+				INSERT INTO team (name)
+				VALUES( "'.$userinfo['username'].'")
+			';
+			
+			$this->CI->db->query($sql);
+			$team_id = $this->CI->db->insert_id();
+			
+			$sql =
+			'
+				INSERT INTO user__register__team (user_id, team_id, player)
+				VALUES ("'.$user_id.'", "'.$team_id.'", 1)
+			';
+			$this->CI->db->query($sql);
+			
 			//Automatically login to created account
 			if($auto_login) {		
 				//Destroy old session

@@ -17,6 +17,10 @@
 				<td class="bigmac bracketSize"></td>
 			</tr>
 			<tr>
+				<td>Team size: </td>
+				<td class="bigmac bracketTeamSize"></td>
+			</tr>
+			<tr>
 				<td>Type: </td>
 				<td class="bigmac bracketType"></td>
 			</tr>

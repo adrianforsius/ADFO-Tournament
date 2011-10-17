@@ -25,11 +25,12 @@ $(function(){
 			$.each(data[0], function(index, value){
 				$('.bracketName').text(value.name);
 				$('.bracketSize').text(value.size);
+				$('.bracketTeamSize').text(value.team_size);
 				$('.bracketType').text(value.type);
 				$('.bracketStart').text(value.start);
 				$('.bracketEnd').text(value.end);
 				//$('.player p').text('');
-				$('.supervise').attr('href', 'http://localhost/tournament-0.0.2/tour_controller/supervise_tournament/'+arena);
+				//$('.supervise').attr('href', 'http://localhost/tournament-0.0.2/tour_controller/supervise_tournament/'+arena);
 			});
 		});
 		//start to loop

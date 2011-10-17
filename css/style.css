@@ -342,4 +342,13 @@ a{
 		-webkit-box-shadow: 0 0 8px #D0D0D0;
 	}
 
-
+#tournamentinfo{
+	float: left;
+}
+#tourApplyForm{
+	float: left;
+	clear: both;
+}	
+.officer{
+	color: white;
+}

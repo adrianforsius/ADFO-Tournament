@@ -34,11 +34,26 @@ class Tour_controller extends CI_Controller {
 		$data['data'] = $this->Tour_model->get_all($item);
 		$this->load->view('index', $data);
 	}
-
 	
-	public function apply_to_tournament(){
-		
-		$this->index();
+	public function load_apply_to_tournament($arena){
+		$bracket = $this->Tour_model->get_active_bracket($arena);
+		$data['teams'] = $this->Tour_model->get_teams_by_user_and_size($bracket[0]['team_size']);
+		$data['bracket'] = $bracket;
+		$data['userInfo'] = $this->Tour_model->session();
+		$data['view'] = 'apply_to_tournament';
+		$this->load->view('index', $data);
+	}
+	
+	//Print admin view of a tournament
+	public function load_supervise_tournament($arena){
+		if($this->Tour_model->session('authority') == 5 && $this->Tour_model->session('logged_in')){
+			$data['bracket'] = $this->fetch_bracket(0,$arena);
+			$data['appliedteam'] = $this->Tour_model->fetch_applied_team($arena);
+			$data['view'] = 'supervise_tournament';
+			$this->load->view('index', $data);
+		}else{
+			redirect('tour_controller/load_tournament', 'refresh');
+		}
 	}
 	//backup just in case
 	//Loads the tournament view with needed data
@@ -68,10 +83,10 @@ class Tour_controller extends CI_Controller {
 	}
 	
 	public function load_profile(){
-		$profile['userdata'] = $this->Tour_model->session();
-		$profile['teams'] = $this->Tour_model->get_teams_by_user();
-		$profile['view'] = 'profile';
-		$this->load->view('index', $profile);
+		$data['userdata'] = $this->Tour_model->session();
+		$data['teams'] = $this->Tour_model->get_teams_by_user();
+		$data['view'] = 'profile';
+		$this->load->view('index', $data);
 	}
 	
 	//Fetch bracket from db, AJAX
@@ -87,8 +102,17 @@ class Tour_controller extends CI_Controller {
 	}
 	
 	//Insert team in between hand for model
-	public function sign_up_team_to_bracket(){
-		$this->Tour_model->sign_up_team_to_bracket();
+	public function sign_up_to_bracket(){
+		if($this->input->post('teamType') == 0){
+			if($this->Tour_model->sign_up_team_to_bracket()){
+				redirect('tour_controller/load_tournament', 'refresh');
+			}
+		}else if($this->input->post('teamType') == 1){
+			if($this->Tour_model->sign_up_player_to_bracket()){
+				redirect('tour_controller/load_tournament', 'refresh');
+			}
+		}
+		
 		redirect('tour_controller/load_tournament', 'refresh');
 	}
 
@@ -119,7 +143,7 @@ class Tour_controller extends CI_Controller {
 		$this->Tour_model->random_teams($bracketId);
 	}
 	
-	//Create a team from register form
+	//Create a team from   form
 	public function create_team(){
 		$this->form_validation->set_rules
 										( 	
@@ -138,17 +162,8 @@ class Tour_controller extends CI_Controller {
 		}
 	}
 	
-	//Print admin view of a tournament
-	public function supervise_tournament($arena){
-		if($this->Tour_model->session('authority') == 5 && $this->Tour_model->session('logged_in')){
-			$data['bracket'] = $this->fetch_bracket(0,$arena);
-			$data['appliedteam'] = $this->Tour_model->fetch_applied_team($arena);
-			$data['view'] = 'supervise_tournament';
-			$this->load->view('index', $data);
-		}else{
-			redirect('tour_controller/load_tournament', 'refresh');
-		}
-	}
+	
+	
 	
 	//Create new user
 	function create_login() {
@@ -180,7 +195,7 @@ class Tour_controller extends CI_Controller {
 										);
 		
 		if ($this->form_validation->run() == false) {
-			redirect('tour_controller/load_register_login');			
+			redirect('tour_controller/load_view/register');			
 		} else {
 			//Create account
 			$userInfo = array
