@@ -74,8 +74,6 @@ $base = 0;
 	';
 //echo '<input type="submit" value="updatera" />';
 echo '<a href="'.base_url().'tour_controller/random_teams/'.$bracket[0]['id'].'">Random teams</a>';
-echo '<a href="'.base_url().'tour_controller/confirm_teams">Confirm teams</a>';
-echo '<a href="'.base_url().'tour_controller/confirm_teams/">Confirm match</a>';
 echo '</div>';
 echo
 '

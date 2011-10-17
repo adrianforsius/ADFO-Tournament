@@ -14,6 +14,7 @@
 		foreach($teams as $index => $team) {
 			echo '<a href="'.base_url().'tour_controller/load_team/'.$team['id'].'">'.$team['name'].'</a> ';
 		}
+		echo '<a href="#">'.$userdata['username'].'</a>';
 		?> 
 		</p>
 		<p>Born: <?php echo ''; ?></p>

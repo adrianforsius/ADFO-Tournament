@@ -35,6 +35,12 @@ class Tour_controller extends CI_Controller {
 		$this->load->view('index', $data);
 	}
 	
+	public function load_edit_tournament($arena){
+		$data['view'] = 'edit_tournament';
+		$data['bracket'] = $this->Tour_model->get_active_bracket($arena);
+		$this->load->view('index', $data);
+	}
+	
 	public function load_apply_to_tournament($arena){
 		$bracket = $this->Tour_model->get_active_bracket($arena);
 		$data['teams'] = $this->Tour_model->get_teams_by_user_and_size($bracket[0]['team_size']);
@@ -55,20 +61,6 @@ class Tour_controller extends CI_Controller {
 			redirect('tour_controller/load_tournament', 'refresh');
 		}
 	}
-	//backup just in case
-	//Loads the tournament view with needed data
-	/*public function load_tournament(){
-		$data['bracket'] = $this->fetch_bracket(false);
-		$data['gamename'] = $this->Tour_model->fetch_game_name();
-		$data['userdata'] = $this->Tour_model->session();
-		$data['appliedteam'] = $this->Tour_model->fetch_applied_team();
-		$data['view'] = 'tournament';
-		if(!empty($data)){
-			$this->load->view('index', $data);
-		}else{
-			redirect('tour_controller/load_tournament', 'refresh');
-		}
-	}*/
 	
 	public function load_tournament(){
 		$data['tournament'] = $this->Tour_model->get_bracket_set();
@@ -128,11 +120,13 @@ class Tour_controller extends CI_Controller {
 		redirect('tour_controller/load_supervise_tournament/'.$arena, 'refresh');
 	}
 	
+	//Remove team from the tournament to applying status
 	public function undo_team_position($matchId, $bracketId){
 		$arena = $this->Tour_model->undo_team_position($matchId, $bracketId);
 		redirect('tour_controller/load_supervise_tournament/'.$arena, 'refresh');
 	}
 	
+	//Approve team applicant
 	public function place_team(){
 		$arena = $this->Tour_model->place_team();
 		redirect('tour_controller/load_supervise_tournament/'.$arena, 'refresh');
@@ -142,6 +136,15 @@ class Tour_controller extends CI_Controller {
 	public function random_teams($bracketId){
 		$arena = $this->Tour_model->random_teams($bracketId);
 		redirect('tour_controller/load_supervise_tournament/'.$arena, 'refresh');
+	}
+	
+	function edit_tournament($bracketId){
+		$this->Tour_model->edit_tournament($bracketId);
+		redirect('tour_controller/load_supervise_tournament/'.$arena, 'refresh');
+	}
+	function delete_tournament($bracketId){
+		$this->Tour_model->delete_tournament($bracketId);
+		redirect('tour_controller/load_tournament', 'refresh');
 	}
 	
 	//Create a team from   form
@@ -162,8 +165,6 @@ class Tour_controller extends CI_Controller {
 			redirect('tour_controller/load_view/register_team', 'refresh');
 		}
 	}
-	
-	
 	
 	
 	//Create new user

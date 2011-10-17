@@ -22,11 +22,11 @@ echo
 			</tr>
 			<tr>
 				<td>Start: </td>
-				<td class="bigmac bracketStart">'.$bracket[0]['start'].'</td>
+				<td class="bigmac bracketStart">'.$bracket[0]['start_time'].'</td>
 			</tr>
 			<tr>
 				<td>End: </td>
-				<td class="bigmac bracketEnd">'.$bracket[0]['end'].'</td>
+				<td class="bigmac bracketEnd">'.$bracket[0]['end_time'].'</td>
 			</tr>
 		</table>
 	</div>

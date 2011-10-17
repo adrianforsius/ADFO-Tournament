@@ -360,8 +360,8 @@ class Tour_model extends CI_Model {
 		'
 			SELECT *
 			FROM bracket
-			WHERE start < NOW()
-				AND end > NOW()
+			WHERE start_time < NOW()
+				AND end_time > NOW()
 				AND arena = '.$arena.'
 		';		
 		
@@ -379,8 +379,8 @@ class Tour_model extends CI_Model {
 		'
 			SELECT *
 			FROM bracket
-			WHERE start < NOW()
-				AND end > NOW()
+			WHERE start_time < NOW()
+				AND end_time > NOW()
 			ORDER BY arena ASC
 		';
 		
@@ -537,7 +537,25 @@ class Tour_model extends CI_Model {
 			$this->db->insert('team__attend__bracket', $data);
 		}
 		return false;
-		
+	}
+	
+	function edit_tournament($bracketId){
+		$sql =
+		'
+			UPDATE bracket
+			SET 
+				name = "'.$this->input->post('editTourName').'",
+				size = "'.$this->input->post('editTourSize').'",
+				team_size = "'.$this->input->post('editTourTeamSize').'",
+				type = "'.$this->input->post('editTourType').'",
+				start_time = "'.$this->input->post('editTourStart').'",
+				end_time = "'.$this->input->post('editTourEnd').'"
+			WHERE bracket.id = "'.$bracketId.'"
+		';
+		if($this->db->query($sql)){
+			return true;
+		}
+		return false;
 	}
 
 	/**

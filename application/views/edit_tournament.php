@@ -1,26 +1,33 @@
 <?php
-echo form_open('tour_controller/create_login');
-echo '<br>';
-echo	form_label('Name: ', 'edittourname');
-echo '<br>';
-echo	form_input('edittourname');
-echo '<br>';
-echo	form_label('Size: ', 'edittoursize');
-echo '<br>';
-echo	form_input('edittoursize');
-echo '<br>';
-echo	form_label('Start (format: YY-MM-DD HH:MM:SS): ', 'edittourstart');
-echo '<br>';
-echo	form_input('edittourstart');
-echo '<br>';
-echo	form_label('End (format: YY-MM-DD HH:MM:SS): ', 'edittourend');
-echo '<br>';
-echo	form_input('edittourend');
-echo '<br>';
-echo	form_label('Type: ', 'edittourtype');
-echo '<br>';
-echo	form_input('edittourtype');
-echo '<br>';
-echo	form_submit('submitedittour', 'Edit');
-echo	form_close();
-echo '</div>';
+echo
+'
+<form action="'.base_url().'tour_controller/edit_tournament/'.$bracket[0]['id'].'" method="post">
+	<label for="editTourName">Tournament name:</label>
+	<br>
+	<input type="text" name="editTourName" value="'.$bracket[0]['name'].'" />
+	<br>
+	<label for="editTourSize">Tournament size:</label>
+	<br>
+	<input type="text" name="editTourSize" value="'.$bracket[0]['size'].'" />
+	<br>
+	<label for="editTourTeamSize">Tournament team size</label>
+	<br>
+	<input type="text" name="editTourTeamSize" value="'.$bracket[0]['team_size'].'" />
+	<br>
+	<label for="editTourType">Tournament type:</label>
+	<br>
+	<input type="text" name="editTourType" value="'.$bracket[0]['type'].'" />
+	<br>
+	<label for="editTourStart">Start: </label>
+	<br>
+	<input type="text" name="editTourStart" value="'.$bracket[0]['start_time'].'" />
+	<br>
+	<label for="editTourEnd">End:</label>
+	<br>
+	<input type="text" name="editTourEnd" value="'.$bracket[0]['end_time'].'" />
+	<br>
+	<input type="submit" name="editTourSubmit" value="uppdatera"/>
+</form>
+
+
+';

@@ -3,6 +3,10 @@ $(function(){
 	//$("div#bracketHolder > div").hide();
 	//$("#stTournament").show();
 	$(".tabNavigation li:first-child a").addClass("current");
+	$('.delete').click(function(){
+		var answer = confirm('Delete?');
+		return answer // answer is a boolean
+	});  
 	
 	arena = $(".tabNavigation li:first-child a").attr('title');
 	$("#"+arena+"Tournament").fadeIn(2000);
@@ -27,8 +31,8 @@ $(function(){
 				$('.bracketSize').text(value.size);
 				$('.bracketTeamSize').text(value.team_size);
 				$('.bracketType').text(value.type);
-				$('.bracketStart').text(value.start);
-				$('.bracketEnd').text(value.end);
+				$('.bracketStart').text(value.start_time);
+				$('.bracketEnd').text(value.end_time);
 				//$('.player p').text('');
 				//$('.supervise').attr('href', 'http://localhost/tournament-0.0.2/tour_controller/supervise_tournament/'+arena);
 			});

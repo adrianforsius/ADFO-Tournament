@@ -42,7 +42,6 @@
 		if($this->session->userdata('authority') == 5){
 			echo 
 			'
-					<a href="'.base_url().'tour_controller/load_view/edit_tournament">Editera turnering</a>
 					<a href="'.base_url().'tour_controller/load_view/create_tournament">Skapa ny turnering</a>
 					<a href="'.base_url().'tour_controller/load_profile">Min profil</a>
 				</div>
