@@ -119,28 +119,29 @@ class Tour_controller extends CI_Controller {
 	//Calculate match stats for all matches on men arena
 	public function match_stats(){
 		$arena = $this->Tour_model->match_stats();
-		redirect('tour_controller/supervise_tournament/'.$arena, 'refresh');
+		redirect('tour_controller/load_supervise_tournament/'.$arena, 'refresh');
 	}
 	
 	//Delete team from tournament position
 	public function  delete_team_position($matchId, $bracketId){
 		$arena = $this->Tour_model->delete_team_position($matchId, $bracketId);
-		redirect('tour_controller/supervise_tournament/'.$arena, 'refresh');
+		redirect('tour_controller/load_supervise_tournament/'.$arena, 'refresh');
 	}
 	
 	public function undo_team_position($matchId, $bracketId){
 		$arena = $this->Tour_model->undo_team_position($matchId, $bracketId);
-		redirect('tour_controller/supervise_tournament/'.$arena, 'refresh');
+		redirect('tour_controller/load_supervise_tournament/'.$arena, 'refresh');
 	}
 	
 	public function place_team(){
 		$arena = $this->Tour_model->place_team();
-		redirect('tour_controller/supervise_tournament/'.$arena, 'refresh');
+		redirect('tour_controller/load_supervise_tournament/'.$arena, 'refresh');
 	}
 	
 	//Random teams in the beginning of the tournament to make it fair
 	public function random_teams($bracketId){
-		$this->Tour_model->random_teams($bracketId);
+		$arena = $this->Tour_model->random_teams($bracketId);
+		redirect('tour_controller/load_supervise_tournament/'.$arena, 'refresh');
 	}
 	
 	//Create a team from   form

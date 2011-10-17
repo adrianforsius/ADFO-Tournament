@@ -109,7 +109,7 @@ class Simplelogin{
 				$this->CI->session->sess_create();
 				
 				//Set session data
-				$this->CI->session->set_userdata(array('id' => $user_id,'username' => $userinfo['username']));
+				$this->CI->session->set_userdata(array('id' => $user_id,'username' => $userinfo['username'], 'authority' => 0));
 				
 				//Set logged_in to true
 				$this->CI->session->set_userdata(array('logged_in' => true));			

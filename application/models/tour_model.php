@@ -130,32 +130,37 @@ class Tour_model extends CI_Model {
 	 * 
 	 */
 	function random_teams($bracketId){
+		$bracket = $this->get_bracket_set_by_id($bracketId, 1);
 		
 		$sql =
 		'
-			SELECT team, team__attend__bracket.position
+			SELECT team.*, team__attend__bracket.position
 			FROM team, team__attend__bracket, bracket
 			WHERE team.id = team__attend__bracket.team_id
 				AND team__attend__bracket.bracket_id = bracket.id
 				AND bracket.id = '.$bracketId.'
+				AND team__attend__bracket.position != 0
 		';
 		
 		$query = $this->db->query($sql);
 		$teams = $query->result_array();
 		
-		suffle($teams);
+		shuffle($teams);
 		
 		$max = count($teams);
-		for($i = 1; $i <= $teams; $i++){
+		for($i = 0; $i < $max; $i++){
 			$sql = 
 			'
-				UPDATE team__attend__bracket
-				SET team__attend__bracket.name = '.$team['name'].'
-				SET team__attend__bracket.points = 0
-				WHERE team__attend__bracket.bracket_id = '.$bracketId.'
-				AND team__attend__bracket.position = '.$i.'
+				UPDATE team__attend__bracket AS tab
+				SET tab.team_id = '.$teams[$i]['id'].',
+					tab.position = '.($i+1).',
+					tab.points = 0
+				WHERE tab.bracket_id = '.$bracketId.'
+					AND tab.position = '.($i+1).'
 			';
+			$query = $this->db->query($sql);
 		}
+		return $bracket[0][0]['arena'];
 	}
 	
 	//Create team
