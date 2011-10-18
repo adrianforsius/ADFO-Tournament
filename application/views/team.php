@@ -18,5 +18,5 @@
 	
 	echo 
 	'
-		<a href="'.base_url().'tour_controller/apply_to_team/'.$teamInfo['id'].'">apply to team</a>
+		<a href="'.base_url().'tour_controller/apply_to_team/'.$teamInfo[0]['id'].'">apply to team</a>
 	';

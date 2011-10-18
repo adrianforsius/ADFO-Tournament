@@ -1,16 +1,6 @@
 <?php
 $this->load->view('tabs');
 
-
-echo '<br>';
-echo '<br>';
-echo '<br>';
-echo '<br>';
-echo '<br>';
-echo '<pre>';
-//print_r($tournament[2]);
-echo '</pre>';
-
 foreach($tournament[0] as $tourindex => $bracketInfo){
 	if
 	(
@@ -76,8 +66,7 @@ foreach($tournament[0] as $tourindex => $bracketInfo){
 	'
 		<div id="tourFooter">
 	';
-
-	if($userdata['logged_in'] == true){
+	if(!empty($userdata['logged_in']) && $userdata['logged_in'] == true){
 		echo
 		'
 			<a href="'.base_url().'tour_controller/load_apply_to_tournament/'.$bracketInfo['arena'].'">Ansök till turneringen</a>
@@ -104,3 +93,4 @@ foreach($tournament[0] as $tourindex => $bracketInfo){
 	echo '</div>';
 	echo '</div>';
 }
+echo '</div>';

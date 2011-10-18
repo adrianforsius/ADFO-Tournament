@@ -7,7 +7,7 @@
 <script src="<?php echo base_url(); ?>js/script.js" type="text/javascript" language="javascript"></script>
 <script src="<?php echo base_url(); ?>js/custom-carousel.js" type="text/javascript" language="javascript"></script>
 <meta http-equiv="Content-Type" content="text/html" charset="uft-8">
-<link rel="stylesheet" href="<?php echo base_url(); ?>css/style.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo base_url(); ?>css/style-1.0.css" type="text/css" />
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 <title>Welcome to CodeIgniter</title>
 </head>

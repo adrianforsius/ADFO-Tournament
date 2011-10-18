@@ -1,6 +1,7 @@
 body{
- font: verdana, helvetica, sans-serif, bold;
- background: url('../img/lfbg.png') 100%;
+	font: verdana, helvetica, sans-serif, bold;
+	background: url('../img/lfbg.png');
+	overflow:scroll;
 }
 table {
   border-collapse: collapse;
@@ -24,7 +25,7 @@ ul li{
 	display: block;
 	float: left;
 	margin: 0 10px;
-	border: 2px solid black;
+	/*border: 2px solid black;*/
 	cursor: pointer;
 }
 form{
@@ -32,29 +33,17 @@ form{
 }
 a{
 	text-decoration: none;
-	padding: 5px;
+	padding: 5px 8px;
 }
 #content{
 	margin: 10px auto;
 	width: 960px;
 	color: #6ff;
 	background-color: #005;
-	height: 1200px;
+	/*height: 1200px;*/
 }
-.current{
-	color: red;
-}
-#tab1{
 
-}
-#tab2{
-
-}
-#tab3{
-	
-}
 .bracketHolder{
-	float: left;
 	width: 960px;
 	margin: 0 auto;
 	height: 620px;
@@ -64,9 +53,9 @@ a{
 	/*margin: 0 80px;*/
 }
 #tabs{
-	float: left;
 	margin: 0 80px;
 	height: 220px;
+	background: blue;
 }
 #control{
 	float: left;
@@ -74,6 +63,7 @@ a{
 }
 #loginBox{
 	width: 960px;
+	height: 140px;
 }
 #nav{
 	float: left;
@@ -89,7 +79,7 @@ a{
 }
 #profilesidebar{
 	width: 250px;
-	float: left;
+	float: right;
 }
 #profilemain{
 	width: 710px;
@@ -236,8 +226,9 @@ a{
 
 /*-----------regform---------*/
 #regform{
-	float: left;
 	margin: 20px 50px;
+	height: 500px;
+	width: 900px;
 }
 #loginFormBox{
 	width: 720px;
@@ -311,36 +302,17 @@ a{
 		margin: 0 0 14px 0;
 		padding: 14px 15px 10px 15px;
 	}
-
-	code {
-		font-family: Consolas, Monaco, Courier New, Courier, monospace;
-		font-size: 12px;
-		background-color: #f9f9f9;
-		border: 1px solid #D0D0D0;
-		color: #002166;
-		display: block;
-		margin: 14px 0 14px 0;
-		padding: 12px 10px 12px 10px;
-	}
-
-	#body{
-		margin: 0 15px 0 15px;
-	}
-	
-	p.footer{
-		text-align: right;
-		font-size: 11px;
-		border-top: 1px solid #D0D0D0;
-		line-height: 32px;
-		padding: 0 10px 0 10px;
-		margin: 20px 0 0 0;
-	}
-	
-	#container{
-		margin: 10px;
-		border: 1px solid #D0D0D0;
-		-webkit-box-shadow: 0 0 8px #D0D0D0;
-	}
+.tabNavigation li{
+	background: grey;
+	padding: 5px 8px;
+}
+.tabNavigation a{
+	color: white;
+}
+.tabNavigation .current{
+	background: black;
+	color: red;
+}
 
 #tournamentinfo{
 	float: left;
@@ -352,4 +324,16 @@ a{
 .officer{
 	color: white;
 }
-
+#tournamentinfo{
+	background: url('../img/bg.jpg') repeat-x 100%;
+	padding: 10px;
+}
+.tabTable tr td:first-child{
+	color: yellow;
+}
+.tabTable tr td{
+	color: white;
+}
+.clear{
+	clear: both;
+}

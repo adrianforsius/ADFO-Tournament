@@ -1,0 +1,662 @@
+body{
+	font: verdana, helvetica, sans-serif, bold;
+	background-color: #fff;
+	background: url('../img/lfbg.png');
+	min-width: 960px;
+	font: 13px/20px normal Helvetica, Arial, sans-serif;
+	color: #4F5155;
+	overflow-y:scroll;
+}
+table {
+  border-collapse: collapse;
+  border: none;
+  font: helvetica, sans-serif, bold;
+  margin: 10px;
+}
+td {
+  vertical-align: middle;
+  width: 10em;
+  margin: 0;
+  padding: 0;
+}
+td p{
+  border-bottom: solid 1px black;
+  margin: 0;
+  padding: 5px 5px 2px 5px;
+}
+ul li{
+	list-style-type: none;
+	display: block;
+	float: left;
+	margin: 0 10px;
+	/*border: 2px solid black;*/
+	cursor: pointer;
+}
+form{
+	margin: 0px;
+}
+a{
+	text-decoration: none;
+	padding: 5px 8px;
+	background-color: transparent;
+    color: #999;
+    font-weight: normal;
+}
+
+/* `Containers
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 960px;
+}
+
+/* `Grid >> Global
+----------------------------------------------------------------------------------------------------*/
+
+.grid_1,
+.grid_2,
+.grid_3,
+.grid_4,
+.grid_5,
+.grid_6,
+.grid_7,
+.grid_8,
+.grid_9,
+.grid_10,
+.grid_11,
+.grid_12 {
+  display: inline;
+  float: left;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.push_1, .pull_1,
+.push_2, .pull_2,
+.push_3, .pull_3,
+.push_4, .pull_4,
+.push_5, .pull_5,
+.push_6, .pull_6,
+.push_7, .pull_7,
+.push_8, .pull_8,
+.push_9, .pull_9,
+.push_10, .pull_10,
+.push_11, .pull_11 {
+  position: relative;
+}
+
+/* `Grid >> Children (Alpha ~ First, Omega ~ Last)
+----------------------------------------------------------------------------------------------------*/
+
+.alpha {
+  margin-left: 0;
+}
+
+.omega {
+  margin-right: 0;
+}
+
+/* `Grid >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 .grid_1 {
+  width: 60px;
+}
+
+.container_12 .grid_2 {
+  width: 140px;
+}
+
+.container_12 .grid_3 {
+  width: 220px;
+}
+
+.container_12 .grid_4 {
+  width: 300px;
+}
+
+.container_12 .grid_5 {
+  width: 380px;
+}
+
+.container_12 .grid_6 {
+  width: 460px;
+}
+
+.container_12 .grid_7 {
+  width: 540px;
+}
+
+.container_12 .grid_8 {
+  width: 620px;
+}
+
+.container_12 .grid_9 {
+  width: 700px;
+}
+
+.container_12 .grid_10 {
+  width: 780px;
+}
+
+.container_12 .grid_11 {
+  width: 860px;
+}
+
+.container_12 .grid_12 {
+  width: 940px;
+}
+
+/* `Prefix Extra Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 .prefix_1 {
+  padding-left: 80px;
+}
+
+.container_12 .prefix_2 {
+  padding-left: 160px;
+}
+
+.container_12 .prefix_3 {
+  padding-left: 240px;
+}
+
+.container_12 .prefix_4 {
+  padding-left: 320px;
+}
+
+.container_12 .prefix_5 {
+  padding-left: 400px;
+}
+
+.container_12 .prefix_6 {
+  padding-left: 480px;
+}
+
+.container_12 .prefix_7 {
+  padding-left: 560px;
+}
+
+.container_12 .prefix_8 {
+  padding-left: 640px;
+}
+
+.container_12 .prefix_9 {
+  padding-left: 720px;
+}
+
+.container_12 .prefix_10 {
+  padding-left: 800px;
+}
+
+.container_12 .prefix_11 {
+  padding-left: 880px;
+}
+
+/* `Suffix Extra Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 .suffix_1 {
+  padding-right: 80px;
+}
+
+.container_12 .suffix_2 {
+  padding-right: 160px;
+}
+
+.container_12 .suffix_3 {
+  padding-right: 240px;
+}
+
+.container_12 .suffix_4 {
+  padding-right: 320px;
+}
+
+.container_12 .suffix_5 {
+  padding-right: 400px;
+}
+
+.container_12 .suffix_6 {
+  padding-right: 480px;
+}
+
+.container_12 .suffix_7 {
+  padding-right: 560px;
+}
+
+.container_12 .suffix_8 {
+  padding-right: 640px;
+}
+
+.container_12 .suffix_9 {
+  padding-right: 720px;
+}
+
+.container_12 .suffix_10 {
+  padding-right: 800px;
+}
+
+.container_12 .suffix_11 {
+  padding-right: 880px;
+}
+
+/* `Push Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 .push_1 {
+  left: 80px;
+}
+
+.container_12 .push_2 {
+  left: 160px;
+}
+
+.container_12 .push_3 {
+  left: 240px;
+}
+
+.container_12 .push_4 {
+  left: 320px;
+}
+
+.container_12 .push_5 {
+  left: 400px;
+}
+
+.container_12 .push_6 {
+  left: 480px;
+}
+
+.container_12 .push_7 {
+  left: 560px;
+}
+
+.container_12 .push_8 {
+  left: 640px;
+}
+
+.container_12 .push_9 {
+  left: 720px;
+}
+
+.container_12 .push_10 {
+  left: 800px;
+}
+
+.container_12 .push_11 {
+  left: 880px;
+}
+
+/* `Pull Space >> 12 Columns
+----------------------------------------------------------------------------------------------------*/
+
+.container_12 .pull_1 {
+  left: -80px;
+}
+
+.container_12 .pull_2 {
+  left: -160px;
+}
+
+.container_12 .pull_3 {
+  left: -240px;
+}
+
+.container_12 .pull_4 {
+  left: -320px;
+}
+
+.container_12 .pull_5 {
+  left: -400px;
+}
+
+.container_12 .pull_6 {
+  left: -480px;
+}
+
+.container_12 .pull_7 {
+  left: -560px;
+}
+
+.container_12 .pull_8 {
+  left: -640px;
+}
+
+.container_12 .pull_9 {
+  left: -720px;
+}
+
+.container_12 .pull_10 {
+  left: -800px;
+}
+
+.container_12 .pull_11 {
+  left: -880px;
+}
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+
+.clearfix:before,
+.clearfix:after {
+  content: '\0020';
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+/*
+  The following zoom:1 rule is specifically for IE6 + IE7.
+  Move to separate stylesheet if invalid CSS is a problem.
+*/
+
+.clearfix {
+  zoom: 1;
+}
+
+/*CI stuff*/
+	::selection{ background-color: #E13300; color: white; }
+	::moz-selection{ background-color: #E13300; color: white; }
+	::webkit-selection{ background-color: #E13300; color: white; }
+
+
+#content{
+	margin: 10px auto;
+	width: 960px;
+	color: #fff;
+	background-color: #262626;
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+
+.bracketHolder{
+	width: 960px;
+	margin: 0 auto;
+	height: 620px;
+	/*background-color: #666;*/
+	background: url("../img/hej.jpg");
+	
+	/*margin: 0 80px;*/
+}
+#tabs{
+	margin: 0 60px;
+	height: 250px;
+	background: blue;
+}
+#control{
+	float: left;
+	margin: 0 80px;
+}
+#loginBox{
+	width: 960px;
+	height: 140px;
+	padding: 0 20px;
+}
+#nav{
+	float: left;
+	margin-top: 20px;
+	height: 20px;
+}
+#nav a{
+	/*background: url("../img/lfbg.png");*/
+	background: blue;
+	margin-right: 10px;
+}
+#profilesidebar h1, #profilesidebar p{
+	margin: 10px 30px;
+}
+#profilesidebar{
+	width: 250px;
+	float: right;
+}
+#profilemain{
+	width: 710px;
+	float: right;
+}
+#profileImg{
+	margin: 80px 0 0 80px;
+	width:80px;
+	height:95px;
+}
+#profileThumb{
+	margin: 20px 0 0 80px;
+	height: 50px;
+	width: 50px;
+}
+/*----------------fekke med divitis     START     -------------------*/
+.match{
+	border: 3px black;
+	border-style: solid solid solid none;
+	width: 170px;
+	height: 100px;
+	margin: 20px;
+}
+.match div{
+	width: 80px;
+	height: 15px;
+	border: 2px solid black;
+}
+.match div p{
+	font: arial 14px black;
+}
+.top{
+	/*position: relative;
+	top: 2px;
+	left: 2px;*/
+	margin-top: 2px;
+	float: left;
+	clear: both;
+}
+.bot{
+	/*position: relative;
+	top: 40px;
+	left: 2px;*/
+	margin-top: 40px;
+	float: left;
+	clear: both;
+}
+#col2 .bot{
+	position: relative;
+	top: 80px;
+}
+#col3 .bot{
+	position: relative;
+	top: 160px;
+}
+#col1{
+	width: 200px;
+	height: 700px;
+	float: left;
+}
+#col2{
+	width: 200px;
+	height: 700px;
+	float: left;
+}
+#col2 .match{
+	margin-top: 70px;
+	margin-bottom: 120px;
+	height: 120px;
+}
+#col3{
+	width: 200px;
+	height: 700px;
+	float: left;
+}
+#col3 .match{
+	height: 200px;
+	margin-top: 150px;
+}
+/*#winner{
+	float: left;
+	width: 160px;
+	height: 20px;
+	border: 3px black;
+	border-style: none none solid none;
+	margin-top: 230px;
+}*/
+#col1 .match .avatar{
+	float: right;
+	width: 35px;
+	height: 35px;
+	background: url("hej.jpg");
+}
+.floor{
+	margin-top: 28px;
+}
+/*----------------fekke med divitis-------------------*/
+
+/*-----------------------fekke med spelarbaserade divar-----------------------*/
+.player{
+	background-color: #666;
+	height: 60px;
+	width: 180px;
+	margin: 15px;
+}
+.c2 .player:first-child{
+	margin-top: 55px;
+}
+.c2 .player{
+	margin-top: 90px;
+}
+.c3 .player:first-child{
+	margin-top: 140px;
+}
+.c3 .player{
+	margin-top: 230px;
+}
+.c4 .player{
+	margin-top: 280px;
+}
+.colo{
+	width: 240px;
+	height: 620px;
+	float:left;
+}
+.frame{
+	background-color: #787;
+	height: 50px;
+	width: 50px;
+	float: right;
+	margin: 5px;
+}
+.playerinfo{
+	float: left;
+	width: 110px;
+	height: 40px;
+	margin: 10px 5px;
+	font: arial 18px white;
+}
+.playerinfo p{
+	margin: 0;
+	overflow: hidden;
+}
+
+/*-----------regform---------*/
+#regform{
+	margin: 20px 50px;
+	height: 500px;
+	width: 900px;
+}
+#loginFormBox{
+	width: 720px;
+	float: left;
+	height: 100px;
+	margin-top: 20px;
+}
+#loginUserBox{
+	height: 100px;
+	margin-top: 20px;
+	width: 240px;
+	float: right;
+}
+#loginUserBox p{
+	margin: 0;
+}
+.tabTable{
+	float: left;
+	font: 16px helvetica;
+}
+.tabTable tr{
+	height: 30px;
+	width: 50px;
+}
+.bigmac{
+	width: 500px;
+}
+#logoutForm{
+	float: left;
+	margin-left: 90px;
+}
+#tournament form{
+	margin: 0;
+}
+.bracketHolder{
+	display: none;
+}
+.currentArena{
+	display: block;
+}
+#tourFooter{
+	float: left;
+}
+#teamApply{
+	float: left;
+} 
+.tabNavigation li{
+	background: grey;
+	padding: 5px 8px;
+}
+.tabNavigation a{
+	color: white;
+}
+.tabNavigation .current{
+	background: black;
+	color: red;
+}
+
+#tournamentinfo{
+	float: left;
+}
+#tourApplyForm{
+	float: left;
+	clear: both;
+}	
+.officer{
+	color: white;
+}
+#tournamentinfo{
+	background: url('../img/bg.jpg') repeat-x 100%;
+	padding: 10px;
+}
+.tabTable tr td:first-child{
+	color: yellow;
+}
+.tabTable tr td{
+	color: white;
+}
+.clear{
+	clear: both;
+}
