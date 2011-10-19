@@ -7,7 +7,7 @@ class Tour_model extends CI_Model {
 	//Match stats go thru admin-tournament-view to and check each match for result 
 	function match_stats(){
 		$bracketId = $this->input->post('bracketId');
-		$bracketInfo = $this->get_bracket_set_by_id($bracketId);
+		$bracketInfo = $this->get_bracket_set_by_id($bracketId, 0);
 		
 		$base = 0;
 		$colo = log($bracketInfo[0][0]['size'],2);
@@ -46,6 +46,7 @@ class Tour_model extends CI_Model {
 						INSERT INTO team__attend__bracket
 						(team_id, bracket_id, position)
 					';
+					
 					
 					if($team1Points > $team2Points){
 						$sql.=
@@ -173,6 +174,49 @@ class Tour_model extends CI_Model {
 		return false;
 	}
 	
+	function apply_to_team($teamId){
+		$sql =
+		'
+			INSERT INTO user__register__team
+			(user_id, team_id, active)
+			VALUES('.$this->session('user_id').', '.$teamId.', 0)
+		';
+		if($this->db->query($sql)){
+			return true;
+		}
+		return false;
+	}
+	
+	function confirm_team_applicant($userId, $teamId){
+		$sql =
+		'
+			UPDATE user__register__team
+			SET active=1
+			WHERE user_id = '.$userId.'
+				AND team_id = '.$teamId.'
+				AND active = 0
+		';
+		if($this->db->query($sql)){
+			return true;
+		}
+		return false;
+	}
+	
+	function accept_team_request($teamId){
+		$sql =
+		'
+			UPDATE user__register__team
+			SET active=1
+			WHERE user_id = '.$this->session('user_id').'
+				AND team_id = '.$teamId.'
+				AND active = 2
+		';
+		if($this->db->query($sql)){
+			return true;
+		}
+		return false;
+	}
+	
 	function place_team(){
 		$bracketId = $this->input->post('bracketId');
 		$bracket = $this->get_bracket_set_by_id($bracketId, 1);
@@ -225,6 +269,7 @@ class Tour_model extends CI_Model {
 			) AS team, user, user__register__team
 			WHERE team.id = user__register__team.team_id
 				AND user__register__team.user_id = user.id
+				AND user__register__team.active = 1
 				AND user.id = '.$this->session->userdata('id').'
 		';
 		$query = $this->db->query($sql);
@@ -272,9 +317,10 @@ class Tour_model extends CI_Model {
 	function get_team_member($id){
 		$sql =
 		'
-			SELECT user.name, user.id, urt.officer
+			SELECT user.*, user.id, urt.officer
 			FROM user__register__team AS urt, user
 			WHERE urt.user_id = user.id
+				AND urt.active = 1
 				AND urt.team_id ='.$id.'
 		';
 		$query = $this->db->query($sql);
@@ -406,7 +452,7 @@ class Tour_model extends CI_Model {
 		$bracket = $query->result_array();
 		$bracketSet[] = $bracket;
 		
-		if($part = 1){
+		if($part == 1){
 			return $bracketSet;
 		}
 		
@@ -491,11 +537,6 @@ class Tour_model extends CI_Model {
 		return false;
 	}
 		
-	/**
-	 *	Add team to bracket and place in db 	
-	 * 
-	 *  return bool
-	 */
 	function sign_up_team_to_bracket(){
 		$data = array
 						(
@@ -558,11 +599,6 @@ class Tour_model extends CI_Model {
 		return false;
 	}
 
-	/**
-	 * Get user data from session
-	 * 
-	 * return bool
-	 */
 	function session($data = ''){
 		if($data == '') {
 			$userdata = $this->session->all_userdata();

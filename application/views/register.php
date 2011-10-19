@@ -7,7 +7,7 @@ $options = array
 					'id' => 'regForm'
 				);
 
-echo form_open('tour_controller/create_login', $options);
+echo form_open('home/create_login', $options);
 echo '<p>* Obligatoriskt fält</p>';
 echo	form_label('Username: ', 'regusername');
 echo '<br>';

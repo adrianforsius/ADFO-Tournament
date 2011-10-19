@@ -270,7 +270,7 @@ a{
 	display: block;
 }
 #tourFooter{
-	float: left;
+	height: 50px;
 }
 #teamApply{
 	float: left;
@@ -311,6 +311,8 @@ a{
 }
 .tabNavigation .current{
 	background: black;
+}
+.tabNavigation .current a{
 	color: red;
 }
 
@@ -334,6 +336,6 @@ a{
 .tabTable tr td{
 	color: white;
 }
-.clear{
-	clear: both;
+.cross{
+	background: url('../img/icons/block.png');
 }

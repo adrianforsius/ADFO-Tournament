@@ -30,7 +30,7 @@ echo
 			</tr>
 		</table>
 	</div>
-<form id="tourApplyForm" action="'.base_url().'/tour_controller/sign_up_to_bracket" method="post">
+<form id="tourApplyForm" action="'.base_url().'/home/sign_up_to_bracket" method="post">
 	<select name="tourTeam">
 ';
 if($bracket[0]['team_size'] > 1){

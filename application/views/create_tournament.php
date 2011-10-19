@@ -1,5 +1,5 @@
 <?php
-echo form_open('tour_controller/create_login');
+echo form_open('home/create_login');
 echo	form_label('Name: ', 'createtourname');
 echo '<br>';
 echo	form_input('createtourname');

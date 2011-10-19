@@ -381,6 +381,10 @@ a{
 	::moz-selection{ background-color: #E13300; color: white; }
 	::webkit-selection{ background-color: #E13300; color: white; }
 
+a:hover{
+	color: white;
+}	
+
 
 #content{
 	margin: 10px auto;
@@ -389,21 +393,16 @@ a{
 	background-color: #262626;
 	margin-top: 40px;
 	margin-bottom: 40px;
+	clear: both;
 }
 
 .bracketHolder{
-	width: 960px;
-	margin: 0 auto;
-	height: 620px;
-	/*background-color: #666;*/
-	background: url("../img/hej.jpg");
-	
-	/*margin: 0 80px;*/
+	display: none;
 }
 #tabs{
-	margin: 0 60px;
+	background:	url('../img/lfbg.png');
+	margin: 0;
 	height: 250px;
-	background: blue;
 }
 #control{
 	float: left;
@@ -411,17 +410,18 @@ a{
 }
 #loginBox{
 	width: 960px;
-	height: 140px;
-	padding: 0 20px;
+	color: #fff;
+	background-color: #262626;
+	margin: 0 auto;
+	height: 330px;
 }
 #nav{
 	float: left;
-	margin-top: 20px;
 	height: 20px;
 }
 #nav a{
 	/*background: url("../img/lfbg.png");*/
-	background: blue;
+	background: #262626;
 	margin-right: 10px;
 }
 #profilesidebar h1, #profilesidebar p{
@@ -429,15 +429,13 @@ a{
 }
 #profilesidebar{
 	width: 250px;
-	float: right;
 }
 #profilemain{
 	width: 710px;
-	float: right;
 }
-#profileImg{
-	margin: 80px 0 0 80px;
+.profileImg{
 	width:80px;
+	overflow: hidden;
 	height:95px;
 }
 #profileThumb{
@@ -533,7 +531,8 @@ a{
 	background-color: #666;
 	height: 60px;
 	width: 180px;
-	margin: 15px;
+	margin-left: 15px;
+	margin-right: 15px;
 }
 .c2 .player:first-child{
 	margin-top: 55px;
@@ -563,14 +562,16 @@ a{
 	margin: 5px;
 }
 .playerinfo{
+	overflow: hidden;
 	float: left;
-	width: 110px;
+/*	width: 110px;
 	height: 40px;
 	margin: 10px 5px;
-	font: arial 18px white;
+	font: arial 18px white;*/
 }
+
 .playerinfo p{
-	margin: 0;
+	margin: 0 0 2px 8px;
 	overflow: hidden;
 }
 
@@ -582,27 +583,18 @@ a{
 }
 #loginFormBox{
 	width: 720px;
-	float: left;
 	height: 100px;
-	margin-top: 20px;
+	float: left;
 }
 #loginUserBox{
 	height: 100px;
-	margin-top: 20px;
 	width: 240px;
 	float: right;
 }
 #loginUserBox p{
 	margin: 0;
 }
-.tabTable{
-	float: left;
-	font: 16px helvetica;
-}
-.tabTable tr{
-	height: 30px;
-	width: 50px;
-}
+
 .bigmac{
 	width: 500px;
 }
@@ -613,18 +605,33 @@ a{
 #tournament form{
 	margin: 0;
 }
-.bracketHolder{
-	display: none;
+#tournament{
+	height: 625px;
+	background: url("../img/farcry.jpg");
+}
+.superviseTournament .colo p,
+.superviseTournament .colo input,
+.superviseTournament .colo a
+{
+	margin: 2px;
+	padding: 2px;
+	float: left;
 }
 .currentArena{
 	display: block;
 }
 #tourFooter{
-	float: left;
+	background-color: #262626;
+	height: 35px;
+	clear: both;
 }
 #teamApply{
-	float: left;
-} 
+	margin-left: 10px;
+}	
+#teamApply p, #teamApply h3{
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
 .tabNavigation li{
 	background: grey;
 	padding: 5px 8px;
@@ -634,22 +641,27 @@ a{
 }
 .tabNavigation .current{
 	background: black;
-	color: red;
-}
-
-#tournamentinfo{
-	float: left;
 }
 #tourApplyForm{
 	float: left;
 	clear: both;
 }	
 .officer{
-	color: white;
+	color: #FFF68F;	
 }
 #tournamentinfo{
+	float: left;
+	width: 960px;
 	background: url('../img/bg.jpg') repeat-x 100%;
-	padding: 10px;
+}
+.tabTable{
+	float: left;
+	font: 16px helvetica;
+	margin: 20px 50px;
+}
+.tabTable tr{
+	height: 30px;
+	width: 50px;
 }
 .tabTable tr td:first-child{
 	color: yellow;
@@ -660,3 +672,15 @@ a{
 .clear{
 	clear: both;
 }
+.cross{
+	width: 32px;
+	height: 32px;
+	padding: 1px 8px;
+	margin-right: 8px;
+	background: url('../img/icons/GIF/004.gif');
+}
+#headerImg{
+	width: 960px;
+	height: 200px;
+}
+	

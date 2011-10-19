@@ -2,22 +2,22 @@ $(function(){
 	
 	//$("div#bracketHolder > div").hide();
 	//$("#stTournament").show();
-	$(".tabNavigation li:first-child a").addClass("current");
+	$(".tabNavigation li:first-child").addClass("current");
 	$('.delete').click(function(){
 		var answer = confirm('Delete?');
 		return answer // answer is a boolean
 	});  
 	
-	arena = $(".tabNavigation li:first-child a").attr('title');
+	arena = $(".tabNavigation li").attr('title');
 	$("#"+arena+"Tournament").fadeIn(2000);
 	updateBoard(arena);
 	$('.bracketHolder .currentArena').show();
 	
-	$(".tabNavigation li a").click(function(){
+	$(".tabNavigation li").click(function(){
 		$('.bracketHolder').removeClass('currentArena');
-		$(".tabNavigation li a").removeClass("current");
+		$(".tabNavigation li").removeClass("current");
 		$(this).addClass("current");
-		arena = $(this).attr('title');
+		arena = $(this).attr('value');
 		$('.arena'+arena).addClass('currentArena');
 		updateBoard(arena);
 		$("#tournament").fadeIn(2000);

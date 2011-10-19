@@ -1,7 +1,7 @@
 <?php
 echo
 '
-<form action="'.base_url().'tour_controller/edit_tournament/'.$bracket[0]['id'].'" method="post">
+<form action="'.base_url().'home/edit_tournament/'.$bracket[0]['id'].'" method="post">
 	<label for="editTourName">Tournament name:</label>
 	<br>
 	<input type="text" name="editTourName" value="'.$bracket[0]['name'].'" />

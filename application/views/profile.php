@@ -1,7 +1,6 @@
 <div id="profileContainer">
 	<div id="profilesidebar">
-	<div id="profileImg" style="background-color:red"></div>
-	<div id="profileThumb" style="background-color:red"></div>
+	<img src="../img/profiles/123.jpg" class="profileImg" />
 	</div>
 	<div id="profilemain">
 		
@@ -12,7 +11,7 @@
 		<p>Teams:
 		<?php 
 		foreach($teams as $index => $team) {
-			echo '<a href="'.base_url().'tour_controller/load_team/'.$team['id'].'">'.$team['name'].'</a> ';
+			echo '<a href="'.base_url().'home/load_team/'.$team['id'].'">'.$team['name'].'</a><a class="cross delete" href="'.base_url().'home/leave_team"></a>';
 		}
 		echo '<a href="#">'.$userdata['username'].'</a>';
 		?> 
