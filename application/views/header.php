@@ -15,19 +15,6 @@
 <div id="loginBox">
 		<div id="loginFormBox">
 	<?php
-
-	echo
-	'
-		<form id="loginForm" method="post" action="'.base_url().'home/loginsubmit">
-			<label class="loginBox" for="username">Username:</label>
-			<input class="loginBox" type="text" name="username" />		
-			<label class="loginBox" for="password">Password:</label>
-			<input class="loginBox" type="password" name="password" />
-			<br>
-			<input class="loginBtn" type="submit" name="loginsubmit" value="login" />
-		</form>
-	';
-
 	echo 
 	'
 		</div>
@@ -37,14 +24,53 @@
 	if($this->session->userdata('logged_in')){
 				echo 
 				'
-					<p>Du är inloggad som: '.$this->session->userdata('username').'</p>
-					<p>Vunna matcher: </p>
-					<p>Vunna turneringar: </p>
+					<table class="">
+						<tr>
+							<td>Du är inloggad som: </td>
+							<td>'.$this->session->userdata('username').'</td>
+						</tr>
+						<tr>
+							<td>Vunna matcher: </td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Vunna turneringar: </td>
+							<td></td>
+						</tr>
+					</table>
+					<table class="">
+						<tr>
+							<td>Ansökanden: </td>
+							<td> </td>
+						</tr>
+						<tr>
+							<td>Förfrågningar: </td>
+							<td> </td>
+						</tr>
+						<tr>
+							<td>Medelanden: </td>
+							<td> </td>
+						</tr>
+					</table>
 				';
 				echo form_open('home/loginsubmit', array('id' => 'logoutForm'));
 				echo form_submit('logoutsubmit', 'logout');
 				echo form_close();
+	}else{
+		echo
+		'
+			<form id="loginForm" method="post" action="'.base_url().'home/loginsubmit">
+				<label class="loginBox" for="username">Username:</label>
+				<input class="loginBox" type="text" name="username" />		
+				<label class="loginBox" for="password">Password:</label>
+				<input class="loginBox" type="password" name="password" />
+				<br>
+				<input class="loginBtn" type="submit" name="loginsubmit" value="login" />
+			</form>
+		';
+
 	}
+	
 	echo 
 	'
 		</div>
@@ -62,13 +88,13 @@
 		if($this->session->userdata('authority') == 5){
 			echo 
 			'
-					<a href="'.base_url().'home/page/create_tournament">Skapa ny turnering</a>
+					<a href="'.base_url().'admin/page/create_tournament">Skapa ny turnering</a>
 				
 			';
 		}
 		echo 
 		'
-				<a href="'.base_url().'home/page/register_team">Skapa nytt lag</a>
+				<a href="'.base_url().'home/actions/register_team">Skapa nytt lag</a>
 				<a href="'.base_url().'home/profile">Min profil</a>
 			</div>
 		';

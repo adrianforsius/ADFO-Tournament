@@ -4,75 +4,19 @@ class Tour_model extends CI_Model {
 		parent::__construct();
 	}
 	
-	//Match stats go thru admin-tournament-view to and check each match for result 
-	function match_stats(){
+	function team_advance($teamId, $position){
 		$bracketId = $this->input->post('bracketId');
-		$bracketInfo = $this->get_bracket_set_by_id($bracketId, 0);
 		
-		$base = 0;
-		$colo = log($bracketInfo[0][0]['size'],2);
-		for($i = 0; $i <= $colo; $i++){
-			$jump = ($bracketInfo[0][0]['size']/pow(2,$i)+1);
-			for($e = 0; $e <= ($bracketInfo[0][0]['size']/pow(2,$i)-2);$e+=2){
-
-				//Get all the matches from the start to the end for each match two teams are fetch
-				$team1Points = $this->input->post('team_'.($base+$e+1));
-				$team2Points = $this->input->post('team_'.($base+$e+2));
-				
-				$match1Id = $this->input->post('matchId_'.($base+$e+1));
-				$match2Id = $this->input->post('matchId_'.($base+$e+2));
-
-				/*print_r('$e '.$e);
-				print_r('$jump '.$jump);
-				print_r('$base '.$base);
-				echo '<br>';*/
-				
-				//Check the points for the current match and see if its legit
-				if
-				(
-					!empty($team1Points) && 
-					!empty($team2Points) &&  
-					$team2Points != $team1Points
-				)
-				{
-					
-					//print_r('team1Points: '.$team1Points);
-					//print_r('team2Points: '.$team2Points);
-					
-					
-					//both teams have good values sql is started
-					$sql =
-					'
-						INSERT INTO team__attend__bracket
-						(team_id, bracket_id, position)
-					';
-					
-					
-					if($team1Points > $team2Points){
-						$sql.=
-						'
-							VALUES('.$bracketInfo[1][$base+$e]['team_id'].','.$bracketInfo[0][0]['id'].','.($base+$e+$jump).')
-						';
-					}else{
-						$sql.=
-						'
-							VALUES('.$bracketInfo[1][$base+$e+1]['team_id'].','.$bracketInfo[0][0]['id'].','.($base+$e+$jump).')
-						';
-					}
-					$this->db->query($sql);
-					
-					$this->update_points($team1Points, $match1Id);
-					$this->update_points($team2Points, $match2Id);
-				}
-				//Adjust jump for next match
-				$jump--;
-				//Update base if the end of the line
-				if($e == ($bracketInfo[0][0]['size']/pow(2,$i)-2)){
-					$base+=($e+2);
-				}
-			}
+		$sql =
+		'
+			INSERT INTO team__attend__bracket
+			(team_id, bracket_id, position)
+			VALUES('.$teamId.','.$bracketId.','.$position.')
+		';
+		if($this->db->query($sql)){
+			return true;
 		}
-		return $bracketInfo[0][0]['arena'];
+		return false;
 	}
 	
 	//Upgrade points
@@ -89,13 +33,7 @@ class Tour_model extends CI_Model {
 		return false;
 	}
 	
-	/*	
-	 * 	Delete one teams position in the bracket
-	 * 
-	 * 	@param INT
-	 * 	@param INT
-	 *	return INT
-	 */
+	
 	function delete_team_position($matchId, $bracketId){
 		//Get both values from link get-valued
 		$sql =
@@ -114,7 +52,7 @@ class Tour_model extends CI_Model {
 		$sql =
 		'
 			UPDATE team__attend__bracket
-			SET position = NULL
+			SET position = 0
 			WHERE match_id = '.$matchId.'
 		';
 		if($this->db->query($sql)){
@@ -179,7 +117,7 @@ class Tour_model extends CI_Model {
 		'
 			INSERT INTO user__register__team
 			(user_id, team_id, active)
-			VALUES('.$this->session('user_id').', '.$teamId.', 0)
+			VALUES('.$this->session('id').', '.$teamId.', 0)
 		';
 		if($this->db->query($sql)){
 			return true;
@@ -598,6 +536,7 @@ class Tour_model extends CI_Model {
 		}
 		return false;
 	}
+	
 
 	function session($data = ''){
 		if($data == '') {

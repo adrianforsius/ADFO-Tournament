@@ -4,26 +4,31 @@ class Home extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('Tour_model');
-		/*$data['tournament'] = $this->Tour_model->get_bracket_set();
-		$data['gamename'] = $this->Tour_model->fetch_game_name();
-		$data['userdata'] = $this->Tour_model->session();
-		$data['view'] = 'tournament';
-		$this->load->view('index', $data)*/;
 	}
 	
 	public function index(){
 		redirect('home/tournament', 'refresh');
 	}
 	
-	/****************** LOAD VIEWS ******************/ 
+	/****************** LOAD VIEWS ******************/
+	
+	public function tournament(){
+		$data['tournament'] = $this->Tour_model->get_bracket_set();
+		$data['gamename'] = $this->Tour_model->fetch_game_name();
+		$data['userdata'] = $this->Tour_model->session();
+		$data['view'] = 'tournament';
+		$this->load->view('index', $data);
+	}
+ 
 	public function page($view){
 		$data['view'] = $view;
 		$this->load->view('index', $data);
 	}
 	
-	public function load_user_view($view){
+	public function actions($view){
+		$this->logged_in();
+		$data['userdata'] = $this->Tour_model->session();
 		$data['view'] = $view;
-		$data['userInfo'] = $this->Tour_model->session();
 		$this->load->view('index', $data);
 	}
 	
@@ -56,15 +61,19 @@ class Home extends CI_Controller {
 		$data['data'] = $this->Tour_model->get_all('team');
 		$this->load->view('index', $data);
 	}
-
 	
-	public function edit_tournament($arena){
-		$data['view'] = 'edit_tournament';
-		$data['bracket'] = $this->Tour_model->get_active_bracket($arena);
+	public function profile(){
+		$data['userdata'] = $this->Tour_model->session();
+		$data['teams'] = $this->Tour_model->get_teams_by_user();
+		$data['view'] = 'profile';
 		$this->load->view('index', $data);
 	}
 	
+	
+
+	/****************** USER LOGGED IN FUNCS ******************/
 	public function apply_to_tournament($arena){
+		$this->logged_in();
 		$bracket = $this->Tour_model->get_active_bracket($arena);
 		$data['teams'] = $this->Tour_model->get_teams_by_user_and_size($bracket[0]['team_size']);
 		$data['bracket'] = $bracket;
@@ -73,31 +82,42 @@ class Home extends CI_Controller {
 		$this->load->view('index', $data);
 	}
 	
-	//Print admin view of a tournament
-	public function supervise_tournament($arena){
-		if($this->Tour_model->session('authority') == 5 && $this->Tour_model->session('logged_in')){
-			$data['bracket'] = $this->fetch_bracket(0,$arena);
-			$data['appliedteam'] = $this->Tour_model->fetch_applied_team($arena);
-			$data['view'] = 'supervise_tournament';
-			$this->load->view('index', $data);
-		}else{
-			$this->index();
+	public function sign_up_to_bracket(){
+		$this->logged_in();
+		if($this->input->post('teamType') == 0){
+			if(!$this->Tour_model->sign_up_team_to_bracket()){
+				$this->page('error');
+			}
+		}else if($this->input->post('teamType') == 1){
+			if(!$this->Tour_model->sign_up_player_to_bracket()){
+				$this->page('error');
+			}
 		}
+		$this->index();
 	}
 	
-	public function tournament(){
-		$data['tournament'] = $this->Tour_model->get_bracket_set();
-		$data['gamename'] = $this->Tour_model->fetch_game_name();
-		$data['userdata'] = $this->Tour_model->session();
-		$data['view'] = 'tournament';
-		$this->load->view('index', $data);
+	public function apply_to_team($teamId){
+		$this->logged_in();
+		$this->Tour_model->apply_to_team($teamId);
+		$this->index();
 	}
-	
-	public function profile(){
-		$data['userdata'] = $this->Tour_model->session();
-		$data['teams'] = $this->Tour_model->get_teams_by_user();
-		$data['view'] = 'profile';
-		$this->load->view('index', $data);
+		public function create_team(){
+		$this->logged_in();
+		$this->form_validation->set_rules
+										( 	
+											'teamName',
+											'Teamname',
+											'trim|required|min_length[3]|max_length[50]|xss_clean'
+										);
+		if ($this->form_validation->run() == false) {
+			$this->page('register_team');
+		} else {
+			$teamName = $this->input->post('teamName');
+			if($this->Tour_model->create_team($teamName)){
+				$this->index();
+			}
+			$this->page('register_team');
+		}
 	}
 	
 	/****************** MISC IOS ******************/ 
@@ -113,96 +133,14 @@ class Home extends CI_Controller {
 		}
 	}
 	
-	//AJAX MARKED FUNCTION
-	public function sign_up_to_bracket(){
-		//security check
-		
-		if($this->input->post('teamType') == 0){
-			if(!$this->Tour_model->sign_up_team_to_bracket()){
-				$this->page('error');
-			}
-		}else if($this->input->post('teamType') == 1){
-			if(!$this->Tour_model->sign_up_player_to_bracket()){
-				$this->page('error');
-			}
-		}
-		$this->index();
-	}
-	
-	
-	public function apply_to_team($teamId){
-		if($this->Tour_model->session('logged_in')){
-			$this->Tour_model->apply_to_team($teamId);
-		}	
-		$this->index();
-	}
-
-	//Calculate match stats for all matches on men arena
-	public function match_stats(){
-		$arena = $this->Tour_model->match_stats();
-		redirect('home/supervise_tournament/'.$arena, 'refresh');
-	}
-	
-	//Delete team from tournament position
-	public function  delete_team_position($matchId, $bracketId){
-		$arena = $this->Tour_model->delete_team_position($matchId, $bracketId);
-		redirect('home/supervise_tournament/'.$arena, 'refresh');
-	}
-	
-	//Remove team from the tournament to applying status
-	public function undo_team_position($matchId, $bracketId){
-		$arena = $this->Tour_model->undo_team_position($matchId, $bracketId);
-		redirect('home/supervise_tournament/'.$arena, 'refresh');
-	}
-	
-	//Approve team applicant
-	public function place_team(){
-		$arena = $this->Tour_model->place_team();
-		redirect('home/supervise_tournament/'.$arena, 'refresh');
-	}
-	
-	//Random teams in the beginning of the tournament to make it fair
-	public function random_teams($bracketId){
-		$arena = $this->Tour_model->random_teams($bracketId);
-		redirect('home/supervise_tournament/'.$arena, 'refresh');
-	}
-	
-	/*function edit_tournament($bracketId){
-		$this->Tour_model->edit_tournament($bracketId);
-		redirect('home/supervise_tournament/'.$arena, 'refresh');
-	}*/
-	
-	function delete_tournament($bracketId){
-		$this->Tour_model->delete_tournament($bracketId);
-		$this->index();
-	}
-	
-	//Create a team from form
-	public function create_team(){
-		$this->form_validation->set_rules
-										( 	
-											'teamName',
-											'Teamname',
-											'trim|required|min_length[3]|max_length[50]|xss_clean'
-										);
-		if ($this->form_validation->run() == false) {
-			redirect('home/page/register_team');
-		} else {
-			$teamName = $this->input->post('teamName');
-			if($this->Tour_model->create_team($teamName)){
-				$this->index();
-			}
-			redirect('home/page/register_team', 'refresh');
-		}
-	}
 	
 	/****************** USER FUNCS ******************/ 
 	//Create new user
-	function logged_in(){
+	private function logged_in(){
 		if($this->Tour_model->session('logged_in')){
-			return true;
+			return;
 		}
-		redirect('home/page/error', 'refresh');
+		$this->page('error');
 	}
 	
 	
@@ -235,7 +173,7 @@ class Home extends CI_Controller {
 										);
 		
 		if ($this->form_validation->run() == false) {
-			redirect('home/page/register');			
+			$this->page('register');
 		} else {
 			//Create account
 			$userInfo = array
@@ -250,7 +188,7 @@ class Home extends CI_Controller {
 			if($this->simplelogin->create($userInfo)) {
 				$this->index();	
 			} else {
-				echo 'det gick inte att skapa en användare';			
+				$this->page('error');			
 			}			
 		}
 	}
@@ -301,7 +239,6 @@ class Home extends CI_Controller {
 			}			
 		}
 	}
-	
 	
 	//Logout
 	function logout() {

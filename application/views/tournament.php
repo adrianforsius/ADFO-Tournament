@@ -106,9 +106,9 @@ foreach($tournament[0] as $tourindex => $bracketInfo){
 			<a href="'.base_url().'home/apply_to_tournament/'.$bracketInfo['arena'].'">Ansök till turneringen</a>
 		';
 		if($userdata['authority'] == 5){
-			echo '<a href="'.base_url().'home/edit_tournament/'.$bracketInfo['arena'].'">Editera turnering</a>';
-			echo '<a class="supervise delete" href="'.base_url().'home/supervise_tournament/'.$bracketInfo['arena'].'">Administrera turnering</a>';
-			echo '<a class="delete" href="'.base_url().'home/delete_tournament/'.$bracketInfo['id'].'">Ta bort turnering</a>';
+			echo '<a href="'.base_url().'admin/edit_tournament/'.$bracketInfo['arena'].'">Editera turnering</a>';
+			echo '<a class="supervise delete" href="'.base_url().'admin/supervise_tournament/'.$bracketInfo['arena'].'">Administrera turnering</a>';
+			echo '<a class="delete" href="'.base_url().'admin/delete_tournament/'.$bracketInfo['id'].'">Ta bort turnering</a>';
 		}
 	}
 	echo

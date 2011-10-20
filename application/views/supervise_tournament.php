@@ -10,7 +10,8 @@ echo
 	}
 	echo 
 	'
-	"> <!--start tournament -->
+		"> <!--start tournament -->
+		<form method="post" accept-charset="utf-8" action="'.base_url().'admin/match_stats/'.$bracket[0]['id'].'/'.$bracket[0]['size'].'" />
 	';
 	$colo = log($bracket[0]['size'],2)+1;
 	$base = 0;
@@ -65,13 +66,13 @@ echo
 						if($i == 1){
 							echo
 							'
-									<a style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif; float: right" href="'.base_url().'home/undo_team_position/'.$bracket[1][$index]['match_id'].'/'.$bracket[0]['id'].'">Undo</a>
+									<a style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif; float: right" href="'.base_url().'admin/undo_team_position/'.$bracket[1][$index]['match_id'].'/'.$bracket[0]['id'].'">Undo</a>
 							';
 							
 						}else{
 							echo
 							'
-									<a style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif; float: right" href="'.base_url().'home/delete_team_position/'.$bracket[1][$index]['match_id'].'/'.$bracket[0]['id'].'">Delete</a>
+									<a style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif; float: right" href="'.base_url().'admin/delete_team_position/'.$bracket[1][$index]['match_id'].'/'.$bracket[0]['id'].'">Delete</a>
 							';
 						}
 						
@@ -100,7 +101,7 @@ echo
 		<input type="hidden" name="bracketId" value="'.$bracket[0]['id'].'" />
 		<input type="submit" value="updatera poäng" />
 		</form>
-		<a style="float:right" href="'.base_url().'home/random_teams/'.$bracket[0]['id'].'">Random teams</a>
+		<a style="float:right" href="'.base_url().'admin/random_teams/'.$bracket[0]['id'].'">Random teams</a>
 	</div> <!--end tournament -->
 ';
 
