@@ -31,7 +31,7 @@
 						</tr>
 						<tr>
 							<td>Vunna matcher: </td>
-							<td></td>
+							<td>'.anchor('home/message_inbox', 'Meddelanden').'</td>
 						</tr>
 						<tr>
 							<td>Vunna turneringar: </td>
