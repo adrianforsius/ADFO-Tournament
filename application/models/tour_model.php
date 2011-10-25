@@ -549,4 +549,23 @@ class Tour_model extends CI_Model {
 		}
 		return false;
 	}
+	
+	function send_message($message){
+		$this->db->insert('messages', $message);
+	}
+
+	function read_message($message_to_be_read){
+		$query = $this->db->where('id', $message_to_be_read);
+		$this->db->update('messages', array('read' => 1));
+		$query = $this->db->get('messages');
+		$result = $query->result_array();
+		return $result;
+	}
+	
+	function message_inbox(){
+		$query = $this->db->where('receiver', $this->session->userdata('username'));
+		$query = $this->db->get('messages');
+		$result = $query->result_array();
+		return $result;
+	}
 }

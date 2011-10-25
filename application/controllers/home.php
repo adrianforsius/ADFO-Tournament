@@ -245,4 +245,33 @@ class Home extends CI_Controller {
 		$this->simplelogin->logout();
 		$this->index();
 	}
+	
+	public function new_message(){
+		$data['view'] = 'new_message';
+		$this->load->view('index', $data);
+	}
+	
+	public function message_inbox(){
+		$data['messages'] = $this->Tour_model->message_inbox();
+		$data['view'] = 'message_inbox';
+		$this->load->view('index', $data);
+	}
+	
+	function read_message(){
+		$message_to_be_read = $this->uri->segment(3);
+		$data['message'] = $this->Tour_model->read_message($message_to_be_read);
+		$data['view'] = 'read_message';
+		$this->load->view('index', $data);
+	}
+	
+	//Send messages
+	public function send_message(){
+		$message = array(
+						 'sender' => $this->session->userdata('username'),
+						 'receiver' => $this->input->post('receiver'),
+						 'message' => $this->input->post('message')
+						 );
+		$this->Tour_model->send_message($message);
+		$this->index();
+	}
 }
