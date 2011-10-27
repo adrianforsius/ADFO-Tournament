@@ -31,6 +31,7 @@ class Admin extends CI_Controller {
 	/****************** ADMIN GENERAL ******************/
 	function update_tournament($bracketId){
 		$arena = $this->Tour_model->edit_tournament($bracketId);
+		//$arena = $this->Tour_model->get_arena($bracketId);
 		redirect('admin/supervise_tournament/'.$arena, 'refresh');
 	}
 
@@ -40,7 +41,7 @@ class Admin extends CI_Controller {
 	}
 		
 	private function is_admin(){
-		if($this->Tour_model->session('logged_in') && $this->Tour_model->session('authority') == 5){
+		if($this->Tour_model->session_manager('logged_in') && $this->Tour_model->session_manager('authority') == 5){
 			return;
 		}
 		$this->page('not_allowed');
@@ -81,10 +82,17 @@ class Admin extends CI_Controller {
 		redirect('admin/supervise_tournament/'.$arena, 'refresh');
 	}
 	
+	/*
 	//Random teams in the beginning of the tournament to make it fair
 	public function random_teams($bracketId){
 		$arena = $this->Tour_model->random_teams($bracketId);
 		redirect('admin/supervise_tournament/'.$arena, 'refresh');
+	}
+	*/
+	
+	public function random_teams($bracketId){
+		$teams = $this->Tour_model->get_verfied_teams($bracketId);
+		print_r($teams);
 	}
 	
 	function match_stats($bracketId, $base, $current = 1){
@@ -93,19 +101,23 @@ class Admin extends CI_Controller {
 		$team1Points = $this->input->post('team_'.$current);
 		$team2Points = $this->input->post('team_'.($current+1));
 	
-		$team1MatchId = $this->input->post('matchId_'.$current);
-		$team2MatchId = $this->input->post('matchId_'.($current+1));
+		$team1Id = $this->input->post('teamId_'.$current);
+		$team2Id = $this->input->post('teamId_'.($current+1));
 		
-		$jump = (($base-(floor($current/2)))+$current);
+		//the jump
+		$position = (($base-(floor($current/2)))+$current);
 		
 		if(!empty($team1Points) && !empty($team2Points) && $team2Points != $team1Points){
+				
 			if($team1Points > $team2Points){
-				$this->Tour_model->team_advance($team1MatchId, $jump);
+				$teamId = $team1Id;
 			}else{
-				$this->Tour_model->team_advance($team2MatchId, $jump);
+				$teamId = $team2Id;
 			}
-			$this->Tour_model->update_points($team1Points, $team1MatchId);
-			$this->Tour_model->update_points($team2Points, $team2MatchId);
+			
+			$this->Tour_model->advance_team($teamId, $position); 
+			$this->Tour_model->update_points($team1Points, $team1Id);
+			$this->Tour_model->update_points($team2Points, $team2Id);
 		}
 		$current+=2;
 		if($current < ($base*2)){

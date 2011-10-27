@@ -3,12 +3,14 @@ class Tour_model extends CI_Model {
 	function __construct(){
 		parent::__construct();
 	}
-	function advance_team($teamId, $position){
+	
+	//Insert, tournament
+	function team_advance($teamId, $position){
 		$data = array
 		(
 			'team_id' => $teamId, 
-			'bracket_id' => $this->input->post('bracketId'), 
-			'position'=> $position,
+			'bracket' => $this->input->post('bracketId'), 
+			'position'=> $positon,
 		);
 		return $this->insert('team__attend__bracket', $data);
 	}
@@ -33,7 +35,7 @@ class Tour_model extends CI_Model {
 		(
 			'match_id' => $matchId
 		);
-		if($this->delete('team__attend__bracket', $where)){
+		if($this->delete('team__attend__bracket', $data, $where)){
 			$bracketInfo = $this->get_bracket_set_by_id($bracketId, 1);
 			return $bracketInfo[0][0]['arena'];
 		}
@@ -50,7 +52,7 @@ class Tour_model extends CI_Model {
 		(
 			'match_id' => $matchId
 		);
-		return $this->update('team__attend__bracket', $data, $where);
+		return $this->update('team__attend__bracket');
 		
 		if($this->db->query($sql)){
 			$bracketInfo = $this->get_bracket_set_by_id($bracketId, 1);
@@ -58,67 +60,9 @@ class Tour_model extends CI_Model {
 		}
 		return false;
 	}
-	/*
-	//13 Rader
-	function team_advance($teamId, $position){
-		$bracketId = $this->input->post('bracketId');
-		$sql =
-		'
-			INSERT INTO team__attend__bracket
-			(team_id, bracket_id, position)
-			VALUES('.$teamId.','.$bracketId.','.$position.')
-		';
-		if($this->db->query($sql)){
-			return true;
-		}
-		return false;
-	}
 	
-	//Upgrade points
-	function update_points($teamPoints, $matchId){
-		$sql = 
-		'
-			UPDATE team__attend__bracket
-			SET points = '.$teamPoints.' 
-			WHERE match_id = '.$matchId.'
-		';
-		if($this->db->query($sql)){
-			return true;
-		}
-		return false;
-	}
-	
-	
-	function delete_team_position($matchId, $bracketId){
-		//Get both values from link get-valued
-		$sql =
-		'
-			DELETE FROM team__attend__bracket
-			WHERE match_id = '.$matchId.'
-		';
-		if($this->db->query($sql)){
-			$bracketInfo = $this->get_bracket_set_by_id($bracketId, 1);
-			return $bracketInfo[0][0]['arena']; 
-		}
-		return false;
-	}
-	
-	function undo_team_position($matchId, $bracketId){
-		$sql =
-		'
-			UPDATE team__attend__bracket
-			SET position = 0
-			WHERE match_id = '.$matchId.'
-		';
-		if($this->db->query($sql)){
-			$bracketInfo = $this->get_bracket_set_by_id($bracketId, 1);
-			return $bracketInfo[0][0]['arena']; 
-		}
-		return false;
-		
-	}
-	*/
-	
+	//select from join where whereSwitch
+	//TournamentSupervise select
 	function get_verfied_teams($bracketId){
 		$where = array
 		(
@@ -131,8 +75,8 @@ class Tour_model extends CI_Model {
 			'bracket' => 'bracket.id = team__attend__bracket.bracket_id'
 		);
 		return $this->join('*', 'team', $join, $where, true);
-	}
-	
+	} 
+
 	function random_teams($bracketId){
 		$bracket = $this->get_bracket_set_by_id($bracketId, 1);
 		
@@ -142,8 +86,6 @@ class Tour_model extends CI_Model {
 			FROM team, team__attend__bracket, bracket
 			WHERE team.id = team__attend__bracket.team_id
 				AND team__attend__bracket.bracket_id = bracket.id
-				AND bracket.id = '.$bracketId.'
-				AND team__attend__bracket.position != 0
 		';
 		
 		$query = $this->db->query($sql);
@@ -770,50 +712,7 @@ class Tour_model extends CI_Model {
 		}
 		return false;
 	}
-	/*
-	//General functions
-	function insert($table, $data){
-		if($this->db->insert($table, $data)){
-			return true;
-		}
-		return false;
-	}
 	
-	function update($table, $data, $where){
-		$this->db->where($where);
-		if($this->db->update($table, $data)){
-			return true;
-		}
-		return false;
-	} 
-	
-	function select($table, $where = false){
-		if($where){
-			$result = $this->db->get_where($table, $where);
-			if($result){
-				return $result;
-			}
-		}
-		
-		$result = $this->db->get($table); 
-		if($result){
-			return $result; 
-		}
-		return false;
-	}
-
-	function session_manager($data = ''){
-		if($data == '') {
-			$userdata = $this->session->all_userdata();
-		} else {
-			$userdata = $this->session->userdata($data);
-		}
-		if(!empty($userdata)){
-			return $userdata;
-		}
-		return false;
-	}
-}*/
 	//General functions
 	function insert($table, $data){
 		if($this->db->insert($table, $data)){

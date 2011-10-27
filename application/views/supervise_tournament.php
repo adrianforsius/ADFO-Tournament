@@ -78,7 +78,7 @@ echo
 						
 						echo
 						'
-									<input type="hidden" name="matchId_'.($base+$e).'" value="'.$bracket[1][$index]['match_id'].'" />
+									<input type="hidden" name="teamId_'.($base+$e).'" value="'.$bracket[1][$index]['team_id'].'" />
 									<input type="text" name="team_'.($base+$e).'" size="'.(32/$bracket[0]['size']).'" style="height:'.(48/($colo+1)).'px; margin: -3px" />
 							</div>
 						';
@@ -113,7 +113,7 @@ if(!empty($appliedteam)){
 	echo
 	'
 		<h4>Ansökande lag:</h4	>
-		<form action="'.base_url().'home/place_team" method="post">
+		<form action="'.base_url().'admin/place_team" method="post">
 	';
 	foreach($appliedteam as $index => $teamInfo){
 		echo 

@@ -14,58 +14,87 @@
 <body>
 <div id="loginBox">
 		<div id="loginFormBox">
-	<?php
-	echo 
-	'
-		</div>
-			<div id="loginUserBox">
-	';
-	
+	<?php	
 	if($this->session->userdata('logged_in')){
 				echo 
 				'
-					<table class="">
+					<table class="stats">
 						<tr>
 							<td>Du är inloggad som: </td>
 							<td>'.$this->session->userdata('username').'</td>
 						</tr>
 						<tr>
 							<td>Vunna matcher: </td>
-							<td></td>
+							<td>';
+								if(!empty($matchWins)){
+									echo $matchWins.' vunna matcher';
+								}
+								
+							echo '</td>
 						</tr>
 						<tr>
 							<td>Vunna turneringar: </td>
-							<td></td>
+							<td>';
+								if(!empty($tourWins)){
+									echo $tourWins.' vunna matcher';
+								}
+							echo '</td>
 						</tr>
 					</table>
-					<table class="">
+					<table class="stats">
 						<tr>
 							<td>Ansökanden: </td>
-							<td> </td>
+							<td>';
+							if(!empty($applys)){
+								echo $applys.'st obesvarade ansökningar';
+							}
+							echo
+							'</td>
 						</tr>
 						<tr>
 							<td>Förfrågningar: </td>
-							<td> </td>
+							<td>';
+							if(!empty($teamRequest)){
+								$teams = count($teamRequest[0][0]);
+								echo 
+								'
+									<a href="'.base_url().'home/profile">'.($teams/2).' lag och '.$teams.' förfrågningar </a>
+								';
+							}
+							
+							echo'
+							</td>
 						</tr>
 						<tr>
 							<td>Medelanden: </td>
-							<td> </td>
+							<td>';
+								if(!empty($messages)){
+									echo $messages.'st olästa medelanden';
+								}
+								
+							echo ' </td>
 						</tr>
 					</table>
 				';
-				echo form_open('home/loginsubmit', array('id' => 'logoutForm'));
-				echo form_submit('logoutsubmit', 'logout');
-				echo form_close();
+				echo
+				'
+					<form action="'.base_url().'home/loginsubmit" method="post" id="logoutForm">
+						<input type="submit" name="logoutsubmit" class="turnOff" value ="logout" />
+					</form>
+				';
+		
 	}else{
 		echo
 		'
 			<form id="loginForm" method="post" action="'.base_url().'home/loginsubmit">
-				<label class="loginBox" for="username">Username:</label>
-				<input class="loginBox" type="text" name="username" />		
-				<label class="loginBox" for="password">Password:</label>
-				<input class="loginBox" type="password" name="password" />
-				<br>
 				<input class="loginBtn" type="submit" name="loginsubmit" value="login" />
+				<label class="loginBox" for="username">Username:</label>
+				<br>
+				<input class="loginBox" type="text" name="username" />		
+				<br>
+				<label class="loginBox" for="password">Password:</label>
+				<br>
+				<input class="loginBox" type="password" name="password" />
 			</form>
 		';
 

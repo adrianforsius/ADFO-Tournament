@@ -413,7 +413,7 @@ a:hover{
 	color: #fff;
 	background-color: #262626;
 	margin: 0 auto;
-	height: 330px;
+	height: 340px;
 }
 #nav{
 	float: left;
@@ -582,9 +582,23 @@ a:hover{
 	width: 900px;
 }
 #loginFormBox{
-	width: 720px;
-	height: 100px;
+	width: 900px;
+	height: 110px;
 	float: left;
+}
+#loginFormBox td{
+	width: 13em;
+}
+#loginForm{
+	margin: 5px 290px;
+	width: 320px;
+	float: left;
+}
+#loginForm label{
+	margin-left: 60px;
+	float: left;
+	height: 24px;
+	font-size: 18px;
 }
 #loginUserBox{
 	height: 100px;
@@ -599,8 +613,8 @@ a:hover{
 	width: 500px;
 }
 #logoutForm{
-	float: left;
-	margin-left: 90px;
+	float: right;
+	margin-left: 30px;
 }
 #tournament form{
 	margin: 0;
@@ -663,11 +677,20 @@ a:hover{
 	height: 30px;
 	width: 50px;
 }
-.tabTable tr td:first-child{
+tr td:first-child{
 	color: yellow;
 }
-.tabTable tr td{
+tr td{
 	color: white;
+
+}
+.stats{
+	float: left;
+	height: 80px;
+}
+.messages{
+	float: right;
+	height: 80px;
 }
 .clear{
 	clear: both;
@@ -679,8 +702,39 @@ a:hover{
 	margin-right: 8px;
 	background: url('../img/icons/GIF/004.gif');
 }
+.accept{
+	width: 32px;
+	height: 32px;
+	padding: 1px 8px;
+	margin-right: 8px;
+	background: url('../img/icons/GIF/006.gif');
+}
+.turnOff{
+	width: 100px;
+	height: 100px;
+	/*background: url('../img/icons/turnOff.jpg');*/
+	float: right;
+}
 #headerImg{
 	width: 960px;
 	height: 200px;
 }
-	
+.loginBtn{
+	width: 100px;
+	height: 100px;
+	/*background: url('../img/icons/turnOff.jpg');*/
+	float: right;
+}
+.page{
+	float: left;
+	width: 225px;
+}
+.pageHolder{
+	width: 900px;
+	height: 230px;
+}
+.pagination{
+	margin-left: 420px;
+	margin-right: 420px;
+	padding-bottom: 5px;
+}		

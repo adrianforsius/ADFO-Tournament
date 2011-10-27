@@ -3,7 +3,7 @@
 		<ul class="tabNavigation">
 			<?php
 				foreach($gamename as $nameindex => $name){
-					echo '<li value="'.$name[0]['arena'].'"><a>'.$name[0]['name'].'</a></li>';
+					echo '<li value="'.$name['arena'].'"><a>'.$name['name'].'</a></li>';
 				}
 			?>
 		</ul>

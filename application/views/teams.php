@@ -1,20 +1,28 @@
 <?php
 echo
 '
-	<table>
-		
-	
+	<div class="pageHolder">
+	<div class="page">
 ';
-
-foreach($data as $index => $team){
+$count = 0;
+foreach($data as $record => $team){
+	if($count%11 == 10){
+		echo
+		'
+			</div>
+			<div class="page">
+		';
+	}
 	echo
 	'
-		<tr>
-			<td><a href="'.base_url().'home/team/'.$team['id'].'">'.$team['name'].'</a></td>
-		</tr>
+		<a href="'.base_url().'home/team/'.$team['id'].'">'.$team['name'].'</a>
+		<br>
 	';
+	$count++;
 }
 echo
 '
-	</table>
-';
+	</div>
+	</div>
+';	
+echo '<div class="pagination">'.$pagination.'</div>';

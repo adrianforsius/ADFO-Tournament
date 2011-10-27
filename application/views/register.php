@@ -1,38 +1,36 @@
 <?php
 
-echo '<div id="regform">';
-echo '<h3>Registerar ny användare</h3>';
-$options = array 
-				(
-					'id' => 'regForm'
-				);
-
-echo form_open('home/create_login', $options);
-echo '<p>* Obligatoriskt fält</p>';
-echo	form_label('Username: ', 'regusername');
-echo '<br>';
-echo	form_input('regusername');
-echo '<br>';
-echo	form_label('Password: ', 'regpassword');
-echo '<br>';
-echo	form_password('regpassword');
-echo '<br>';
-echo	form_label('Password Confirmation: ', 'passconf');
-echo '<br>';
-echo	form_password('passconf');
-echo '<br>';
-echo	form_label('Name: ', 'regname');
-echo '<br>';
-echo	form_input('regname');
-echo '<br>';
-echo	form_label('Lastname: ', 'reglastname');
-echo '<br>';
-echo	form_input('reglastname');
-echo '<br>';
-echo	form_label('Email: ', 'regemail');
-echo '<br>';
-echo	form_input('regemail');
-echo '<br>';
-echo	form_submit('submitregisterlogin', 'Registrera!');
-echo	form_close();
-echo '</div>';
+echo 
+'
+<div id="regform">
+	<h3>Registerar ny användare</h3>
+	<from action="'.base_url().'home/create_login" method="post" id="regForm">
+		<label for="regusername">Username: </label>
+		<br>
+		<input type="text" name="regusername" /> 
+		<br>
+		<label for="regpassword">Pasword: </label>
+		<br>
+		<input type="password" name="regpassword" /> 
+		<br>
+		<label for="passconf">Confirm password: </label>
+		<br>
+		<input type="password" name="passconf" /> 
+		<br>
+		<label for="regname">Name: </label>
+		<br>
+		<input type="text" name="regname" /> 
+		<br>
+		<label for="reglastname">Lastname: </label>
+		<br>
+		<input type="text" name="reglastname" /> 
+		<br>
+		<label for="regemail">Email: </label>
+		<br>
+		<input type="text" name="regemail" /> 
+		<br>
+		<input type="submit" name="regloginregister" />
+		<br>	
+	</from>
+</div>
+';
