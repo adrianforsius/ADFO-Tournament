@@ -3,7 +3,6 @@
 	<img src="../img/profiles/123.jpg" class="profileImg" />
 	</div>
 	<div id="profilemain">
-		
 		<h1><?php echo '<a href="'.base_url().'home/edit_profile/'.$userdata['id'].'">Editera profil</a>'; ?></h1>
 		<p>Username: <?php echo $userdata['username'] ?></p>
 		<p>Email: <?php echo $userdata['email'] ?></p>

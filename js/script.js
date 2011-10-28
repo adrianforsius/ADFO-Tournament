@@ -1,8 +1,11 @@
 $(function(){
-	
+	$('.current').show();
+
 	//$("div#bracketHolder > div").hide();
 	//$("#stTournament").show();
-	$(".tabNavigation li:first-child").addClass("current");
+	$(".tabNavigation li:first-child").addClass("show");
+	
+	
 	$('.delete').click(function(){
 		var answer = confirm('Delete?');
 		return answer // answer is a boolean
@@ -11,21 +14,23 @@ $(function(){
 	arena = $(".tabNavigation li").attr('title');
 	$("#"+arena+"Tournament").fadeIn(2000);
 	updateBoard(arena);
-	$('.bracketHolder .currentArena').show();
 	
 	$(".tabNavigation li").click(function(){
-		$('.bracketHolder').removeClass('currentArena');
-		$(".tabNavigation li").removeClass("current");
-		$(this).addClass("current");
+		$('.bracketHolder').removeClass('current');
+		$('.tournamentInfo').removeClass('current');
+		$(".tabNavigation li").removeClass("show");
+		$(this).addClass("show");
 		arena = $(this).attr('value');
-		$('.arena'+arena).addClass('currentArena');
+		$('.arena'+arena).addClass('current');
+		$('.tourInfo'+arena).addClass('current');
 		updateBoard(arena);
 		$("#tournament").fadeIn(2000);
 	});
 	
+	
 	//updateBoard();
 	function updateBoard(arena){
-		$.getJSON('fetch_bracket/1/'+arena, function(data){
+		$.getJSON('get_bracket/1/'+arena, function(data){
 			$.each(data[0], function(index, value){
 				$('.bracketName').text(value.name);
 				$('.bracketSize').text(value.size);

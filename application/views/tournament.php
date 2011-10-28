@@ -1,6 +1,6 @@
 <?php
+echo '<div id="tournamentWrapper">';
 $this->load->view('tabs');
-//print_r($tournament[0]);
 foreach($tournament[0] as $tourindex => $bracketInfo){
 	if
 	(
@@ -10,13 +10,48 @@ foreach($tournament[0] as $tourindex => $bracketInfo){
 		$bracketInfo['size'] == 16 ||   
 		$bracketInfo['size'] == 32  
 	){
+		if($tourindex != 0){
+			echo '<div class="tournamentInfo tourInfo'.$bracketInfo['arena'].'">';
+		}else{
+			echo '<div class="tournamentInfo current tourInfo'.$bracketInfo['arena'].'">';
+		}
 		
+		echo
+		'
+				<table class="tabTable">
+					<tr>
+						<td>Name: </td>
+						<td class="bigmac bracketName">'.$tournament[0][$tourindex]['name'].'</td>
+					</tr>
+					<tr>
+						<td>Size: </td>
+						<td class="bigmac bracketSize">'.$tournament[0][$tourindex]['size'].'</td>
+					</tr>
+					<tr>
+						<td>Team size: </td>
+						<td class="bigmac bracketTeamSize">'.$tournament[0][$tourindex]['team_size'].'</td>
+					</tr>
+					<tr>
+						<td>Type: </td>
+						<td class="bigmac bracketType">'.$tournament[0][$tourindex]['type'].'</td>
+					</tr>
+					<tr>
+						<td>Start: </td>
+						<td class="bigmac bracketStart">'.$tournament[0][$tourindex]['start_time'].'</td>
+					</tr>
+					<tr>
+						<td>End: </td>
+						<td class="bigmac bracketEnd">'.$tournament[0][$tourindex]['end_time'].'</td>
+					</tr>
+				</table>
+			</div>';
 		
 		if($tourindex != 0){
 			echo '<div class="bracketHolder arena'.$bracketInfo['arena'].'">';
 		}else{
-			echo '<div class="bracketHolder currentArena arena'.$bracketInfo['arena'].'">';
+			echo '<div class="bracketHolder current arena'.$bracketInfo['arena'].'">';
 		}
+	
 		echo '<div id="tournament"';
 		if(!empty($bracketInfo['special_image'])){
 			echo 'style="background: url(\'';
@@ -103,11 +138,11 @@ foreach($tournament[0] as $tourindex => $bracketInfo){
 	if(!empty($userdata['logged_in']) && $userdata['logged_in'] == true){
 		echo
 		'
-			<a href="'.base_url().'home/apply_to_tournament/'.$bracketInfo['arena'].'">Ansök till turneringen</a>
+			<a href="'.base_url().'home/apply_to_tournament/'.$bracketInfo['id'].'">Ansök till turneringen</a>
 		';
 		if($userdata['authority'] == 5){
-			echo '<a href="'.base_url().'admin/edit_tournament/'.$bracketInfo['arena'].'">Editera turnering</a>';
-			echo '<a class="supervise delete" href="'.base_url().'admin/supervise_tournament/'.$bracketInfo['arena'].'">Administrera turnering</a>';
+			echo '<a href="'.base_url().'admin/edit_tournament/'.$bracketInfo['id'].'">Editera turnering</a>';
+			echo '<a class="supervise delete" href="'.base_url().'admin/supervise_tournament/'.$bracketInfo['id'].'">Administrera turnering</a>';
 			echo '<a class="delete" href="'.base_url().'admin/delete_tournament/'.$bracketInfo['id'].'">Ta bort turnering</a>';
 		}
 	}

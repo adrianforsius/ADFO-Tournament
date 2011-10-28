@@ -15,10 +15,11 @@ class Admin extends CI_Controller {
 		$this->load->view('index', $data);
 	}
 	
-	public function supervise_tournament($arena){
+	public function supervise_tournament($bracketId){
 		$this->is_admin();
-		$data['bracket'] = $this->fetch_bracket(0,$arena);
-		$data['appliedteam'] = $this->Tour_model->fetch_applied_team($arena);
+		$data['team'] = $this->Tour_model->get_teams_by_bracket_id($bracketId);
+		$bracket = $this->Tour_model->get_bracket_by_id($bracketId);
+		$data['appliedteam'] = $this->Tour_model->get_applied_team($bracketId);
 		$data['view'] = 'supervise_tournament';
 		$this->load->view('index', $data);
 	}
@@ -46,14 +47,15 @@ class Admin extends CI_Controller {
 		}
 		$this->page('not_allowed');
 	}
-	public function fetch_bracket($ajax, $arena = 1){
-		$bracket = $this->Tour_model->fetch_bracket($arena);
-		$appliedteam = $this->Tour_model->fetch_applied_team($arena);
-		$result = array($bracket, $appliedteam);
+	public function get_bracket($ajax, $id){
+		$bracket = $this->Tour_model->get_bracket_by_id($id);
+		$teams = $this->Tour_model->get_teams_by_bracket_id($id);
+		$appliedTeams = $this->Tour_model->get_applied_team($arena);
+		$result = array($bracket, $teams, $appliedTeams);
 		if($ajax){
 			echo json_encode($result);
 		}else{
-			return $bracket;
+			return $result;
 		}
 	}
 	
@@ -78,7 +80,23 @@ class Admin extends CI_Controller {
 	
 	//Approve team applicant
 	public function place_team(){
-		$arena = $this->Tour_model->place_team();
+		$bracketId = $this->input->post('bracketId');
+		$arena = $this->Tour_model->get_arena_by_bracket_id($bracketId);
+		$appliedTeam = $this->get_applied_team($arena);
+	
+		$max = count($appliedTeam);
+		for($i = 0; $i < $max; $i++){
+			$position = $this->input->post('position_'.$i);
+			$teamId = $this->input->post('teamId_'.$i);
+			
+			
+			if($position != 0){
+				$check = $this->Tour_model->get_bracket_position($teamId, $bracketId);
+				if(empty($check)){
+					$this->Tour_model->place_team($position, $teamId, $bracketId);
+				}
+			}
+		}
 		redirect('admin/supervise_tournament/'.$arena, 'refresh');
 	}
 	
@@ -92,7 +110,12 @@ class Admin extends CI_Controller {
 	
 	public function random_teams($bracketId){
 		$teams = $this->Tour_model->get_verfied_teams($bracketId);
-		print_r($teams);
+		shuffle($teams);
+		foreach($teams as $i => $team){
+			$this->Tour_model->update_team_position($bracketId, $team['id'], ($i+1));
+		}
+		$arena = $this->Tour_model->get_arena_by_bracket_id($bracketId);
+		redirect('admin/supervise_tournament/'.$arena, 'refresh');
 	}
 	
 	function match_stats($bracketId, $base, $current = 1){

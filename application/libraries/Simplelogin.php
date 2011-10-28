@@ -109,7 +109,7 @@ class Simplelogin{
 				$this->CI->session->sess_create();
 				
 				//Set session data
-				$this->CI->session->set_userdata(array('id' => $user_id,'username' => $userinfo['username'], 'authority' => 0));
+				$this->CI->session->set_userdata(array('id' => $user_id,'username' => $userinfo['username'], 'authority' => 0, 'team' => $team_id));
 				
 				//Set logged_in to true
 				$this->CI->session->set_userdata(array('logged_in' => true));			
@@ -204,11 +204,12 @@ class Simplelogin{
 				WHERE team.id = user__register__team.team_id
 					AND user__register__team.user_id = user.id
 					AND user.id = '.$this->CI->session->userdata('id').'
+					AND player = 1
 			';
 			
 			$query = $this->CI->db->query($sql);
 			$teamName = $query->result_array();
-			$this->CI->session->set_userdata(array('teams' => $teamName));
+			$this->CI->session->set_userdata(array('team' => $team));
 			
 			//Set logged_in to true
 			$this->CI->session->set_userdata(array('logged_in' => true));			

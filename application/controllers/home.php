@@ -12,8 +12,20 @@ class Home extends CI_Controller {
 	}
 	
 	public function userRedirect($data){
-		if($this->Tour_model->session_manager('logged_in')){
-			$data['teamRequest'] = $this->Tour_model->get_team_requests();
+		$this->logged_in();
+		$teams = $this->Tour_model->get_officer_teams();
+		if($teams){
+			$teamRequest = array();
+			foreach($teams as $i => $team){
+				$users = $this->Tour_model->get_applicants_for_team($team['id']);
+				if($users){
+					$team[] = $users;
+					$teamRequest[] = $team;
+				}
+			}
+			if($teamRequest){
+				$data['teamRequest'] = $teamRequest;
+			}
 			$data['userdata'] = $this->Tour_model->session_manager();
 		}
 		$this->load->view('index', $data);
@@ -22,8 +34,17 @@ class Home extends CI_Controller {
 	/****************** LOAD VIEWS ******************/
 	
 	public function tournament(){
-		$data['tournament'] = $this->Tour_model->get_bracket_set();
-		$data['gamename'] = $this->Tour_model->fetch_game_name();
+		$brackets = $this->Tour_model->get_active_brackets();
+		$appliedTeams = array();
+		$teams = array();
+
+		//subquery solution
+		foreach($brackets as $index => $bracket){
+			$teams[] = $this->Tour_model->get_team_by_bracket_id($bracket['id']);
+			$appliedTeams[] = $appliedTeams = $this->Tour_model->get_applied_teams($bracket['id']);
+		}
+		$data['tournament'] = array($brackets, $teams, $appliedTeams);
+		$data['gamename'] = $this->Tour_model->get_game_name();
 		$data['view'] = 'tournament';
 		$this->userRedirect($data);
 	}
@@ -94,18 +115,15 @@ class Home extends CI_Controller {
 		$this->userRedirect($data);
 	}
 	
+	
+	//under construction
 	public function invite($userId){
-		$teams = get_officer_teams();
-		foreach($teams as $i => $team){
-			
-		}
 		
 	}
 	
 	public function profile(){
 		$this->logged_in();
 		$data['teamInvite'] = $this->Tour_model->get_team_invites();
-		$data['teamRequest'] = $this->Tour_model->get_team_requests();
 		$data['userdata'] = $this->Tour_model->session_manager();
 		$data['teams'] = $this->Tour_model->get_teams_by_user();
 		$data['view'] = 'profile';
@@ -205,8 +223,8 @@ class Home extends CI_Controller {
 	
 	/****************** MISC IOS ******************/ 
 	//Fetch bracket from db, AJAX
-	public function fetch_bracket($ajax, $arena = 1){
-		$bracket = $this->Tour_model->fetch_bracket($arena);
+	public function get_bracket($ajax, $arena = 1){
+		$bracket = $this->Tour_model->get_bracket($arena);
 		$appliedteam = $this->Tour_model->fetch_applied_team($arena);
 		$result = array($bracket, $appliedteam);
 		if($ajax){
@@ -215,6 +233,7 @@ class Home extends CI_Controller {
 			return $bracket;
 		}
 	}
+	
 	
 	
 	/****************** USER FUNCS ******************/ 

@@ -399,10 +399,11 @@ a:hover{
 .bracketHolder{
 	display: none;
 }
+
 #tabs{
 	background:	url('../img/lfbg.png');
 	margin: 0;
-	height: 250px;
+	height: 30px;
 }
 #control{
 	float: left;
@@ -631,9 +632,6 @@ a:hover{
 	padding: 2px;
 	float: left;
 }
-.currentArena{
-	display: block;
-}
 #tourFooter{
 	background-color: #262626;
 	height: 35px;
@@ -653,7 +651,7 @@ a:hover{
 .tabNavigation a{
 	color: white;
 }
-.tabNavigation .current{
+.tabNavigation .show{
 	background: black;
 }
 #tourApplyForm{
@@ -663,8 +661,9 @@ a:hover{
 .officer{
 	color: #FFF68F;	
 }
-#tournamentinfo{
-	float: left;
+.tournamentInfo{
+	display: none;
+	height: 220px;
 	width: 960px;
 	background: url('../img/bg.jpg') repeat-x 100%;
 }
@@ -738,3 +737,6 @@ tr td{
 	margin-right: 420px;
 	padding-bottom: 5px;
 }		
+.current{
+	display: block;
+}
