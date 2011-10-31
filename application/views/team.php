@@ -10,9 +10,9 @@
 	if(!empty($member)){
 		foreach($member as $index => $value){
 			if($value['officer'] == 1){
-				echo '<a href="'.base_url().'home/load_id/user/'.$value['id'].'" class="officer" title="officer">'.$value['username'].'</a>';
+				echo '<a href="'.base_url().'home/user/'.$value['id'].'" class="officer" title="officer">'.$value['username'].'</a>';
 			}else{
-				echo '<a href="'.base_url().'home/load_id/user/'.$value['id'].'">'.$value['username'].'</a>';
+				echo '<a href="'.base_url().'home/user/'.$value['id'].'">'.$value['username'].'</a>';
 			}
 		}
 	}
@@ -40,4 +40,3 @@
 			}
 		}
 	}
-	

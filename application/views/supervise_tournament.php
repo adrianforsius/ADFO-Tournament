@@ -11,20 +11,20 @@ echo
 	echo 
 	'
 		"> <!--start tournament -->
-		<form method="post" accept-charset="utf-8" action="'.base_url().'admin/match_stats/'.$bracket[0]['id'].'/'.$bracket[0]['size'].'" />
+		<form method="post" accept-charset="utf-8" action="'.base_url().'admin/match_stats/'.$bracket['id'].'/'.$bracket['size'].'" />
 	';
-	$colo = log($bracket[0]['size'],2)+1;
+	$colo = log($bracket['size'],2)+1;
 	$base = 0;
 	
 	//Coloumn loop
 	for($i = 1; $i <= $colo; $i++){
 		echo '<div class="colo'.' c'.$i.'" style="width: '.(960/$colo).'px">';
 		//Player loop (ROWS)
-		for($e = 1; $e <= $bracket[0]['size']/pow(2,($i-1));$e++){
+		for($e = 1; $e <= $bracket['size']/pow(2,($i-1));$e++){
 			
 			
 			//Dynamic sizes compromized to an understandable unit
-			$playerMargin = ((610-($bracket[0]['size']*(240/pow(2,($colo-2)))))/$bracket[0]['size']);
+			$playerMargin = ((610-($bracket['size']*(240/pow(2,($colo-2)))))/$bracket['size']);
 			$playerHeight = (240/pow(2,($colo-2)));
 			
 			echo 
@@ -52,40 +52,41 @@ echo
 				}
 				//Start player div
 				echo 'px;">';
-				
-				foreach($bracket[1] as $index => $value){
-					if($value['position'] == ($base+$e)){
-						echo
-						'	
-							<div style="width: 70px; overflow: hidden; height: '.$playerHeight.'px; float: left">
-								<p style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif" id="'.($base+$e).'">'.$bracket[1][$index]['name'].' '.($base+$e).'</p>
-							</div>
-							<div style="float: right">
-						';
-						
-						if($i == 1){
+				if(!empty($teams)){
+					foreach($teams as $index => $value){
+						if($value['position'] == ($base+$e)){
 							echo
-							'
-									<a style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif; float: right" href="'.base_url().'admin/undo_team_position/'.$bracket[1][$index]['match_id'].'/'.$bracket[0]['id'].'">Undo</a>
+							'	
+								<div style="width: 70px; overflow: hidden; height: '.$playerHeight.'px; float: left">
+									<p style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif" id="'.($base+$e).'">'.$teams[$index]['name'].' '.($base+$e).'</p>
+								</div>
+								<div style="float: right">
 							';
 							
-						}else{
+							if($i == 1){
+								echo
+								'
+										<a style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif; float: right" href="'.base_url().'admin/undo_team_position/'.$teams[$index]['match_id'].'/'.$bracket['id'].'">Undo</a>
+								';
+								
+							}else{
+								echo
+								'
+										<a style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif; float: right" href="'.base_url().'admin/delete_team_position/'.$bracket[1][$index]['match_id'].'/'.$bracket[0]['id'].'">Delete</a>
+								';
+							}
+							
 							echo
 							'
-									<a style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif; float: right" href="'.base_url().'admin/delete_team_position/'.$bracket[1][$index]['match_id'].'/'.$bracket[0]['id'].'">Delete</a>
+										<input type="hidden" name="teamId_'.($base+$e).'" value="'.$teams[$index]['team_id'].'" />
+										<input type="text" name="team_'.($base+$e).'" size="'.(32/$bracket['size']).'" style="height:'.(48/($colo+1)).'px; margin: -3px" />
+								</div>
 							';
 						}
-						
-						echo
-						'
-									<input type="hidden" name="teamId_'.($base+$e).'" value="'.$bracket[1][$index]['team_id'].'" />
-									<input type="text" name="team_'.($base+$e).'" size="'.(32/$bracket[0]['size']).'" style="height:'.(48/($colo+1)).'px; margin: -3px" />
-							</div>
-						';
 					}
 				}
 				//Update base
-				if($e == $bracket[0]['size']/pow(2,($i-1))){
+				if($e == $bracket['size']/pow(2,($i-1))){
 					$base+=$e;
 				}
 				echo 
@@ -98,10 +99,10 @@ echo
 	}
 echo
 '
-		<input type="hidden" name="bracketId" value="'.$bracket[0]['id'].'" />
+		<input type="hidden" name="bracketId" value="'.$bracket['id'].'" />
 		<input type="submit" value="updatera poäng" />
 		</form>
-		<a style="float:right" href="'.base_url().'admin/random_teams/'.$bracket[0]['id'].'">Random teams</a>
+		<a style="float:right" href="'.base_url().'admin/random_teams/'.$bracket['id'].'">Random teams</a>
 	</div> <!--end tournament -->
 ';
 
@@ -121,7 +122,7 @@ if(!empty($appliedteam)){
 			<br>
 			<select name="position_'.$index.'">
 		';
-		for($i = 0; $i <= $bracket[0]['size']; $i++){
+		for($i = 0; $i <= $bracket['size']; $i++){
 			echo '<option>'.$i.'</option>';
 		}
 		echo
@@ -134,7 +135,7 @@ if(!empty($appliedteam)){
 	}
 	echo
 	'
-			<input type="hidden" name="bracketId" value="'.$bracket[0]['id'].'" />
+			<input type="hidden" name="bracketId" value="'.$bracket['id'].'" />
 			<input type="submit" value="placera" name="submitTeamPlace" />
 		</form>
 		</div>

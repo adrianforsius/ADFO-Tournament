@@ -1,5 +1,4 @@
 <?php
-
 //ajax live sökning vore fucking coolt
 /*echo
 '
@@ -10,8 +9,6 @@
 
 ';
 * */
-
-
 echo
 '
 	<div class="pageHolder">

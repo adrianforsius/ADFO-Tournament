@@ -8,18 +8,18 @@ class Admin extends CI_Controller {
 	}
 	
 	/****************** ADMIN LOAD VIEWS ******************/
-	public function edit_tournament($arena){
+	public function edit_tournament($bracketId){
 		$this->is_admin();
 		$data['view'] = 'edit_tournament';
-		$data['bracket'] = $this->Tour_model->get_active_bracket($arena);
+		$data['bracket'] = $this->Tour_model->get_active_bracket($bracketId);
 		$this->load->view('index', $data);
 	}
 	
 	public function supervise_tournament($bracketId){
 		$this->is_admin();
-		$data['team'] = $this->Tour_model->get_teams_by_bracket_id($bracketId);
-		$bracket = $this->Tour_model->get_bracket_by_id($bracketId);
-		$data['appliedteam'] = $this->Tour_model->get_applied_team($bracketId);
+		$data['teams'] = $this->Tour_model->get_verified_teams($bracketId);
+		$data['bracket'] = $this->Tour_model->get_bracket_by_id($bracketId);
+		$data['appliedteam'] = $this->Tour_model->get_applied_teams($bracketId);
 		$data['view'] = 'supervise_tournament';
 		$this->load->view('index', $data);
 	}
@@ -30,10 +30,11 @@ class Admin extends CI_Controller {
 	}
 	
 	/****************** ADMIN GENERAL ******************/
+	
 	function update_tournament($bracketId){
-		$arena = $this->Tour_model->edit_tournament($bracketId);
+		$this->Tour_model->edit_tournament($bracketId);
 		//$arena = $this->Tour_model->get_arena($bracketId);
-		redirect('admin/supervise_tournament/'.$arena, 'refresh');
+		redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 	}
 
 	function delete_tournament($bracketId){
@@ -60,62 +61,49 @@ class Admin extends CI_Controller {
 	}
 	
 	/****************** ADMIN AJAX ******************/
-	//Calculate match stats for all matches on men arena
-	/*public function match_stats(){
-		$arena = $this->Tour_model->match_stats();
-		redirect('admin/supervise_tournament/'.$arena, 'refresh');
-	}*/
-	
+	//Calculate match stats for all matches on men arena	
 	//Delete team from tournament position
 	public function  delete_team_position($matchId, $bracketId){
-		$arena = $this->Tour_model->delete_team_position($matchId, $bracketId);
-		redirect('admin/supervise_tournament/'.$arena, 'refresh');
+		$this->Tour_model->delete_team_position($matchId, $bracketId);
+		redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 	}
 	
 	//Remove team from the tournament to applying status
 	public function undo_team_position($matchId, $bracketId){
-		$arena = $this->Tour_model->undo_team_position($matchId, $bracketId);
-		redirect('admin/supervise_tournament/'.$arena, 'refresh');
+		$this->Tour_model->undo_team_position($matchId, $bracketId);
+		redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 	}
 	
 	//Approve team applicant
 	public function place_team(){
 		$bracketId = $this->input->post('bracketId');
-		$arena = $this->Tour_model->get_arena_by_bracket_id($bracketId);
-		$appliedTeam = $this->get_applied_team($arena);
+		$appliedTeam = $this->Tour_model->get_applied_teams($bracketId);
 	
-		$max = count($appliedTeam);
-		for($i = 0; $i < $max; $i++){
+		for($i = 0; $i < count($appliedTeam); $i++){
 			$position = $this->input->post('position_'.$i);
 			$teamId = $this->input->post('teamId_'.$i);
 			
-			
 			if($position != 0){
-				$check = $this->Tour_model->get_bracket_position($teamId, $bracketId);
+				$check = $this->Tour_model->get_team_by_position($position, $bracketId);
 				if(empty($check)){
 					$this->Tour_model->place_team($position, $teamId, $bracketId);
 				}
 			}
 		}
-		redirect('admin/supervise_tournament/'.$arena, 'refresh');
+		redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 	}
 	
-	/*
+	
 	//Random teams in the beginning of the tournament to make it fair
 	public function random_teams($bracketId){
-		$arena = $this->Tour_model->random_teams($bracketId);
-		redirect('admin/supervise_tournament/'.$arena, 'refresh');
-	}
-	*/
-	
-	public function random_teams($bracketId){
-		$teams = $this->Tour_model->get_verfied_teams($bracketId);
+		$this->is_admin();
+		$teams = $this->Tour_model->get_verified_teams($bracketId);
 		shuffle($teams);
 		foreach($teams as $i => $team){
 			$this->Tour_model->update_team_position($bracketId, $team['id'], ($i+1));
 		}
-		$arena = $this->Tour_model->get_arena_by_bracket_id($bracketId);
-		redirect('admin/supervise_tournament/'.$arena, 'refresh');
+		//$arena = $this->Tour_model->get_arena_by_bracket_id($bracketId);
+		redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 	}
 	
 	function match_stats($bracketId, $base, $current = 1){
@@ -146,7 +134,7 @@ class Admin extends CI_Controller {
 		if($current < ($base*2)){
 			$this->match_stats($bracketId, $base, $current);
 		}else{
-			redirect('admin/supervise_tournament/1', 'refresh');
+			redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 		}
 	} 
 }

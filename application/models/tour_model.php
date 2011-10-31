@@ -3,33 +3,6 @@ class Tour_model extends CI_Model {
 	function __construct(){
 		parent::__construct();
 	}
-	
-	/******************** ADMIN ACTIONS TOURNAMENT ********************/
-	
-	function get_bracket_position($position, $bracketId){
-		$where = array
-		(
-			'position' => $position,
-			'bracket_id' => $bracketId,
-		);
-		return $this->select('team__attned__bracket', $where);
-	}
-	
-	function place_team($position, $teamId, $bracketId){
-		$data = array
-		(
-			'position' => $position,
-		);
-		$where = array
-		(
-			'bracket_id' => $bracketId,
-			'team_id' => $teamId,
-			'position' => 0,
-		);
-		return $this->update('team__attend__bracket', $data, $where);
-	}	
-	
-	//Insert tournament
 	function advance_team($teamId, $position){
 		$data = array
 		(
@@ -86,7 +59,7 @@ class Tour_model extends CI_Model {
 	
 	
 	//Tournament select
-	function get_verfied_teams($bracketId){
+	function get_verified_teams($bracketId){
 		$where = array
 		(
 			'bracket.id' => $bracketId,
@@ -97,7 +70,7 @@ class Tour_model extends CI_Model {
 			'team' => 'team.id = team__attend__bracket.team_id',
 			'bracket' => 'bracket.id = team__attend__bracket.bracket_id'
 		);
-		return $this->join('team.*', 'team__attend__bracket', $join, $where, 0);
+		return $this->join('team.*, team__attend__bracket.*', 'team__attend__bracket', $join, $where, 0);
 	}
 	
 	//Tournament update
@@ -115,61 +88,6 @@ class Tour_model extends CI_Model {
 		return $this->update('team__attend__bracket', $data, $where);
 	}
 	
-	function edit_tournament($bracketId){
-		$sql =
-		'
-			UPDATE bracket
-			SET 
-				name = "'.$this->input->post('editTourName').'",
-				size = "'.$this->input->post('editTourSize').'",
-				team_size = "'.$this->input->post('editTourTeamSize').'",
-				type = "'.$this->input->post('editTourType').'",
-				start_time = "'.$this->input->post('editTourStart').'",
-				end_time = "'.$this->input->post('editTourEnd').'"
-			WHERE bracket.id = "'.$bracketId.'"
-		';
-		if($this->db->query($sql)){
-			return true;
-		}
-		return false;
-	}
-	
-	/******************** USER ACTIONS TOURNAMENT ********************/
-	function sign_up_team_to_bracket(){
-		$data = array
-		(
-			'team_id' =>  $this->input->post('tourTeam'),
-			'bracket_id' =>  $this->input->post('tourBracketId'),
-			'position' => 0,
-		);
-		
-		if ($this->select('team__attend__bracket', $data)) {
-			$result = $this->insert('team__attend__bracket', $data);
-			return $this->result_check($result);
-		}
-		return false;
-	}
-	
-	function sign_up_player_to_bracket(){
-		$join = array
-		(
-			'team' => 'team.id = team__attend__bracket.team_id',
-		);
-		$where = array
-		(
-			'bracket_id' => $this->input->post('tourBracketId'),
-			'team_id' => $this->session_manager('team'),
-		);
-		$result = $join->select('*', 'team__attend__bracket', $join, $where);
-		
-		if(!$this->result_contain($result)){
-			$result = $this->insert('team__attend__bracket', $where);
-			return $this->result_check($result);
-		}
-		return false;
-	}
-	
-	/******************** TOURNAMENT ********************/
 	//TournamentSupervise select
 	function get_arena_by_bracket_id($bracketId){
 		$where = array
@@ -180,87 +98,6 @@ class Tour_model extends CI_Model {
 		return $bracket[0]['arena'];
 	}
 	
-	function get_applied_teams($bracketId){
-		$join = array
-		(
-			'team' => 'team.id = team__attend__bracket.team_id',
-			'bracket' => 'bracket.id = team__attend__bracket.bracket_id',
-		);
-		$where = array
-		(
-			'bracket.id' => $bracketId,
-			'team__attend__bracket.position' => 0, 
-		);
-		$this->join('team.*', 'team__attend__bracket', $join, $where, 1);
-		$this->db->order_by('created', 'ASC');
-		$query = $this->db->get();
-		$result = $query->result_array();
-		return $this->result_contain($result);
-	}
-		
-	function get_bracket_by_id($bracketId){
-		$result = $this->get_item_by_id('bracket', $bracketId);
-		return result_contain($result);
-	}
-	
-	function get_team_by_bracket_id($bracketId){ 
-		$join = array
-		(
-			'bracket' => 'bracket.id = team__attend__bracket.bracket_id',
-			'team' => 'team.id = team__attend__bracket.team_id',
-		);
-		$where = array
-		(
-			'bracket.id' => $bracketId,
-			'team__attend__bracket.position >' => 0,
-		);
-		
-		$this->join('team.*, team__attend__bracket.*', 'team__attend__bracket', $join, $where, 1);
-		$this->db->order_by('team__attend__bracket.position', 'ASC');
-		$query = $this->db->get();
-		$result = $query->result_array();
-		return $this->result_contain($result);
-	}
-	
-	function get_active_brackets(){
-		$this->load->helper('date');
-		$where = array
-		(
-			'start_time <'=> mdate('%Y-%m-%d %H:%m:%i',now()),
-			'end_time >' => mdate('%Y-%m-%d %H:%m:%i', now()),
-		);
-		
-		$this->select('bracket', $where, 1);
-		$this->db->order_by('arena', 'ASC');
-		$query = $this->db->get();
-		$result = $query->result_array();
-		return $this->result_contain($result);	
-		
-	}
-	
-	function get_game_name(){
-		$sql = 
-		'
-			SELECT game.name, bracket.arena
-			FROM game JOIN
-			(
-				SELECT * 
-				FROM (`bracket`) 
-				WHERE `start_time` < NOW() 
-					AND `end_time` > NOW() 
-				ORDER BY `arena` ASC
-			) AS bracket
-			ON game.id = bracket.game_id
-			ORDER BY arena ASC
-		';
-		
-		$query = $this->db->query($sql);
-		$result = $query->result_array();
-		return $this->result_contain($result);
-	}
-	
-	/******************** TEAM ACTIONS ********************/
-	//Insert action team
 	function create_team($teamName){
 		$data = array
 		(
@@ -273,25 +110,12 @@ class Tour_model extends CI_Model {
 				'team_id' => $teamId,
 				'user_id' => $this->session_manager('id'),
 				'officer' => 1,
+				'active' => 1,
 			);
 			return $this->insert('user__register__team', $data);
 		}
 	}
 	
-	function get_team_member($id){
-		$join = array
-		(
-			'user' => 'user.id = user__register__team.user_id',
-		);
-		$where = array
-		(
-			'active' => 1,
-			'team_id' => $id,
-		); 
-		return $this->join('user.*', 'user', $join, $where, 0);
-	}
-	
-	//Delete action team
 	function leave_team($teamId){
 		$where = array
 		(
@@ -301,7 +125,6 @@ class Tour_model extends CI_Model {
 		return $this->delete('user__register__team', $where);
 	}
 	
-	//Insert action team
 	function apply_to_team($teamId){
 		$data = array
 		(
@@ -312,7 +135,6 @@ class Tour_model extends CI_Model {
 		return $this->insert('user__register__team', $data);
 	}
 	
-	//Update action team
 	function accept_team_applicant($userId, $teamId){
 		$data = array
 		(
@@ -326,7 +148,7 @@ class Tour_model extends CI_Model {
 		$this->update('user__register__team', $data, $where);
 	}
 
-	//Delete action team
+	
 	function decline_team_applicant($userId, $teamId){
 		$where = array
 		(
@@ -337,7 +159,6 @@ class Tour_model extends CI_Model {
 		$this->delete('user__register__team', $userId, $teamId);
 	 }
 	
-	//Delete action team
 	function decline_invite_from_team($teamId){
 		$data = array
 		(
@@ -352,7 +173,6 @@ class Tour_model extends CI_Model {
 		return $this->update('user__register__team', $data, $where);
 	}
 	
-	//Update action team
 	function accept_invite_from_team($teamId){
 		$data = array
 		(
@@ -366,7 +186,6 @@ class Tour_model extends CI_Model {
 		return $this->update('user__register__team', $data, $where);
 	}
 	
-	//Select team
 	function is_officer($teamId){
 		$where = array
 		(
@@ -377,8 +196,6 @@ class Tour_model extends CI_Model {
 		return $this->select('user__register__team', $where, true);
 	}
 	
-	/******************** INVITES/REQUESTS ********************/
-	//Profile select
 	function get_team_invites(){
 		$where = array
 		(
@@ -392,7 +209,6 @@ class Tour_model extends CI_Model {
 		return $this->join('team.*', 'team', $join, $where, 0);
 	}
 	
-	//Profile select
 	function get_applicants_for_team($teamId){
 		$join = array
 		(
@@ -406,7 +222,31 @@ class Tour_model extends CI_Model {
 		return $this->join('*', 'user__register__team', $join, $where, 0);
 	}
 	
-	/******************** MISC USER ********************/
+	
+	/************** TOUR ADMINISTRATION *************/
+	function get_team_by_position($position, $bracketId){
+		$where = array
+		(
+			'position' => $position,
+			'bracket_id' => $bracketId,
+		);
+		return $this->select('team__attend__bracket', $where);
+	}
+	
+	function place_team($position, $teamId, $bracketId){
+		$data = array
+		(
+			'position' => $position,
+		);
+		$where = array
+		(
+			'bracket_id' => $bracketId,
+			'team_id' => $teamId,
+			'position' => 0,
+		);
+		return $this->update('team__attend__bracket', $data, $where);
+	}	
+	
 	//Subquery FML
 	function get_teams_by_user_and_size($size){
 		$sql = 
@@ -434,6 +274,10 @@ class Tour_model extends CI_Model {
 		return false;
 	}
 	
+	function get_teams_by_bracket_id(){
+		
+	}
+	
 	function get_teams_by_user(){
 		$join = array
 		(
@@ -445,9 +289,9 @@ class Tour_model extends CI_Model {
 			'user_id' => $this->session_manager('id'),
 			'active' => 1,
 		);
-		return $this->join('team.*', 'team', $join, $where, 0);
+		return $this->join('team.*', 'user__register__team', $join, $where, 0);
 	}
-	
+
 	function get_officer_teams(){
 		$join = array
 		(
@@ -463,16 +307,28 @@ class Tour_model extends CI_Model {
 		
 		return $this->join('team.*', 'user__register__team', $join, $where, 0);
 	}
-		
-	/******************** MISC/GENERAL ********************/	
+
 	function get_item_by_id($item, $id){
 		$where = array
 		(
 			$item.'.id' => $id, 
 		);
-		return $this->select($item, $where, 0);
+		return $this->select($item, $where, 2);
 	}
 
+	function get_team_member($id){
+		$join = array
+		(
+			'user' => 'user.id = user__register__team.user_id',
+		);
+		$where = array
+		(
+			'active' => 1,
+			'team_id' => $id,
+		); 
+		return $this->join('user.*, user__register__team.officer', 'user__register__team', $join, $where, 0);
+	}
+	
 	function get_all($table){
 		$query = $this->db->get($table);
 		$data = $query->result_array();
@@ -491,6 +347,159 @@ class Tour_model extends CI_Model {
 		return false;
 	}
 		
+	function get_applied_teams($bracketId){
+		$join = array
+		(
+			'team' => 'team.id = team__attend__bracket.team_id',
+			'bracket' => 'bracket.id = team__attend__bracket.bracket_id',
+		);
+		$where = array
+		(
+			'bracket.id' => $bracketId,
+			'team__attend__bracket.position' => 0, 
+		);
+		$this->join('team.*', 'team__attend__bracket', $join, $where, 1);
+		$this->db->order_by('created', 'ASC');
+		$query = $this->db->get();
+		$result = $query->result_array();
+		return $this->result_contain($result);
+		
+	}
+	
+	function get_bracket_by_id($bracketId){
+		$result = $this->get_item_by_id('bracket', $bracketId);
+		return $this->result_contain($result);
+	}
+	
+	function get_team_by_bracket_id($bracketId){ 
+		$join = array
+		(
+			'bracket' => 'bracket.id = team__attend__bracket.bracket_id',
+			'team' => 'team.id = team__attend__bracket.team_id',
+		);
+		$where = array
+		(
+			'bracket.id' => $bracketId,
+			'team__attend__bracket.position >' => 0,
+		);
+		
+		$this->join('team.*, team__attend__bracket.*', 'team__attend__bracket', $join, $where, 1);
+		$this->db->order_by('team__attend__bracket.position', 'ASC');
+		$query = $this->db->get();
+		$result = $query->result_array();
+		return $this->result_contain($result);
+	}
+	
+	
+	//Fetch all active brackets
+	function get_active_brackets(){
+		//how to get to sqls own NOW for optimization
+		$this->load->helper('date');
+		$where = array
+		(
+			'lan.start_time <'=> mdate('%Y-%m-%d %H:%m:%i',now()),
+			'lan.end_time >' => mdate('%Y-%m-%d %H:%m:%i', now()),
+		);
+		
+		$join = array
+		(
+			'lan' => 'lan.id = bracket.lan_id',
+		);
+		
+		$this->join('bracket.*', 'bracket', $join, $where, 1);
+		$this->db->order_by('arena', 'ASC');
+		$query = $this->db->get();
+		$result = $query->result_array();		
+		return $this->result_contain($result);	
+	}
+	
+	function get_game_name(){
+		$join = array
+		(
+			'bracket' => 'bracket.lan_id = lan.id',
+			'game' => 'game.id = bracket.game_id',
+		);
+		$where = array
+		(
+			'lan.start_time <' => date('Y-m-dd H:i:s'),
+			'lan.end_time >' => date('Y-m-dd H:i:s'),
+		);
+		
+		$this->join('game.name, bracket.id, bracket.arena', 'lan', $join, $where, 1);
+		$this->db->order_by('arena', 'ASC');
+
+		$query = $this->db->get();
+		$result = $query->result_array();
+		return $this->result_contain($result);
+	}
+		
+	function sign_up_team_to_bracket(){
+		$data = array
+		(
+			'team_id' =>  $this->input->post('tourTeam'),
+			'bracket_id' =>  $this->input->post('tourBracketId'),
+			'position' => 0,
+		);
+		
+		if ($this->select('team__attend__bracket', $data)) {
+			$result = $this->insert('team__attend__bracket', $data);
+			return $this->result_check($result);
+		}
+		return false;
+	}
+	
+	function sign_up_player_to_bracket(){
+		$userInfo = $this->session_manager();
+		$join = array
+		(
+			'team' => 'team.id = team__attend__bracket.team_id',
+		);
+		$where = array
+		(
+			
+		);
+		$join->select('*', 'team__attend__bracket', $join, $where);
+		
+		$sql =
+		'
+			SELECT *
+			FROM team__attend__bracket
+			ON team__attend__bracket.team_id = team.id
+			WHERE bracket_id = '.$this->input->post('tourBracketId').'
+		';
+		$query = $this->db->query($sql);
+		$result = $query->result_array();
+		if(!$this->result_contain($result)){
+			$data = array
+			(
+				'team_id' => $this->session_manager('team'),
+				 
+			);
+			$this->insert('team__attend__bracket', $data);
+		}
+		
+		return false;
+	}
+	
+	function edit_tournament($bracketId){
+		$sql =
+		'
+			UPDATE bracket
+			SET 
+				name = "'.$this->input->post('editTourName').'",
+				size = "'.$this->input->post('editTourSize').'",
+				team_size = "'.$this->input->post('editTourTeamSize').'",
+				type = "'.$this->input->post('editTourType').'",
+				start_time = "'.$this->input->post('editTourStart').'",
+				end_time = "'.$this->input->post('editTourEnd').'"
+			WHERE bracket.id = "'.$bracketId.'"
+		';
+		if($this->db->query($sql)){
+			return true;
+		}
+		return false;
+	}
+	
 	//General functions
 	function insert($table, $data){
 		$result = $this->db->insert($table, $data);
@@ -514,13 +523,18 @@ class Tour_model extends CI_Model {
 			if($result){
 				return $result;
 			}
+			return false;
 		}
 		if($switch === 1){
-			$this->db->from($table);
-			$query = $this->db->where($where);
+			$query = $this->db->get_where($table, $where);
 			return;
 		}
-		$query = $this->db->get($table); 
+		if($switch === 2){
+			$query = $this->db->get_where($table, $where);
+			$result = $query->row_array();
+			return $this->result_contain($result);
+		}
+		$query = $this->db->get();
 		$result = $query->result_array();
 		return $this->result_contain($result);
 	}

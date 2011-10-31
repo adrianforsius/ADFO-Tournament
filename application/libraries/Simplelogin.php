@@ -199,7 +199,7 @@ class Simplelogin{
 			
 			$sql = 
 			'
-				SELECT team.name
+				SELECT team.*
 				FROM team, user__register__team, user
 				WHERE team.id = user__register__team.team_id
 					AND user__register__team.user_id = user.id
@@ -208,7 +208,7 @@ class Simplelogin{
 			';
 			
 			$query = $this->CI->db->query($sql);
-			$teamName = $query->result_array();
+			$team = $query->result_array();
 			$this->CI->session->set_userdata(array('team' => $team));
 			
 			//Set logged_in to true

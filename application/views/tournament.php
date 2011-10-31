@@ -37,11 +37,11 @@ foreach($tournament[0] as $tourindex => $bracketInfo){
 					</tr>
 					<tr>
 						<td>Start: </td>
-						<td class="bigmac bracketStart">'.$tournament[0][$tourindex]['start_time'].'</td>
+						<td class="bigmac bracketStart">'.date('l H:i',strtotime($tournament[0][$tourindex]['start_time'])).'</td>
 					</tr>
 					<tr>
 						<td>End: </td>
-						<td class="bigmac bracketEnd">'.$tournament[0][$tourindex]['end_time'].'</td>
+						<td class="bigmac bracketEnd">'.date('l H:i',strtotime($tournament[0][$tourindex]['end_time'])).'</td>
 					</tr>
 				</table>
 			</div>';
@@ -89,21 +89,22 @@ foreach($tournament[0] as $tourindex => $bracketInfo){
 				echo '<div class="playerinfo">';
 				//loop tru all the teams and check if positions i matching
 				//alternative is to have boxarray with exact index, will try this method later
-				foreach($tournament[1][$tourindex] as $index => $team){
-					//print_r($tournament[1][$tourindex][$index]);
-					if(!empty($tournament[1][$tourindex]) && $tournament[1][$tourindex][$index]['position'] == ($base+$e)){
-						echo 
-						'
-							<p style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif">'.$tournament[1][$tourindex][$index]['name'].'</p>
-						';
-						
-						if(!empty($tournament[1][$tourindex][$index]['points']) && 20 <= (240/pow(2,($colo-2)))){
+				if(!empty($tournament[1][$tourindex])){
+					foreach($tournament[1][$tourindex] as $index => $team){
+						if(!empty($tournament[1][$tourindex]) && $tournament[1][$tourindex][$index]['position'] == ($base+$e)){
 							echo 
 							'
-								<p id="points'.($base+$e).'"> Points: '.$tournament[1][$tourindex][$index]['points'].'</p>
+								<p style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif">'.$tournament[1][$tourindex][$index]['name'].'</p>
 							';
+							
+							if(!empty($tournament[1][$tourindex][$index]['points']) && 20 <= (240/pow(2,($colo-2)))){
+								echo 
+								'
+									<p id="points'.($base+$e).'"> Points: '.$tournament[1][$tourindex][$index]['points'].'</p>
+								';
+							}
+						
 						}
-					
 					}
 				}
 				echo
