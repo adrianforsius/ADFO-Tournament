@@ -88,6 +88,16 @@ class Tour_model extends CI_Model {
 		return $this->update('team__attend__bracket', $data, $where);
 	}
 	
+	function get_active_lan(){
+		$where = array
+		(
+			'end_time >=' => date('Y-m-d'),
+			'start_time <=' => date('Y-m-d'),
+		);
+		$result = $this->select('lan', $where);
+		return $this->result_contain($result);
+	}
+	
 	//TournamentSupervise select
 	function get_arena_by_bracket_id($bracketId){
 		$where = array

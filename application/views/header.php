@@ -66,10 +66,10 @@
 							</td>
 						</tr>
 						<tr>
-							<td>Medelanden: </td>
+							<td>Invites: </td>
 							<td>';
-								if(!empty($messages)){
-									echo $messages.'st olästa medelanden';
+								if(!empty($invites)){
+									echo $invites.'st osvarde invites';
 								}
 								
 							echo ' </td>
@@ -103,7 +103,13 @@
 	echo 
 	'
 		</div>
-		<img src="'.base_url().'img/lanfab.png" id="headerImg" />
+		<div id="headerImg">
+			<h1 id="headerText">';
+			if(!empty($lan[0]['name'])){ 
+				echo $lan[0]['name'];
+			}
+		echo '</h1>
+		</div>
 		 
 	
 	<div id="nav">

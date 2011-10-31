@@ -424,6 +424,7 @@ a:hover{
 	/*background: url("../img/lfbg.png");*/
 	background: #262626;
 	margin-right: 10px;
+	float: left;
 }
 #profilesidebar h1, #profilesidebar p{
 	margin: 10px 30px;
@@ -714,9 +715,17 @@ tr td{
 	float: right;
 }
 #headerImg{
+	float: left;
+	background: url('../img/lanfab.png');
 	width: 960px;
 	height: 200px;
 }
+#headerText{
+	position: relative;
+	left: 30px;
+	top: 10px;
+}
+
 .loginBtn{
 	width: 100px;
 	height: 100px;

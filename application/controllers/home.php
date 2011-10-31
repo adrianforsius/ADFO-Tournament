@@ -13,6 +13,7 @@ class Home extends CI_Controller {
 	public function userRedirect($data){
 		//$this->logged_in();
 		$teams = $this->Tour_model->get_officer_teams();
+		$data['lan'] = $this->Tour_model->get_active_lan();
 		if($teams){
 			$teamRequest = array();
 			foreach($teams as $i => $team){

@@ -7,12 +7,33 @@ class Admin extends CI_Controller {
 		$this->is_admin();
 	}
 	
+	public function userRedirect($data){
+		//$this->logged_in();
+		$teams = $this->Tour_model->get_officer_teams();
+		$data['lan'] = $this->Tour_model->get_active_lan();
+		if($teams){
+			$teamRequest = array();
+			foreach($teams as $i => $team){
+				$users = $this->Tour_model->get_applicants_for_team($team['id']);
+				if($users){
+					$team[] = $users;
+					$teamRequest[] = $team;
+				}
+			}
+			if($teamRequest){
+				$data['teamRequest'] = $teamRequest;
+			}
+			$data['userdata'] = $this->Tour_model->session_manager();
+		}
+		$this->load->view('index', $data);
+	}
+	
 	/****************** ADMIN LOAD VIEWS ******************/
 	public function edit_tournament($bracketId){
 		$this->is_admin();
 		$data['view'] = 'edit_tournament';
 		$data['bracket'] = $this->Tour_model->get_active_bracket($bracketId);
-		$this->load->view('index', $data);
+		$this->userRedirect($data);
 	}
 	
 	public function supervise_tournament($bracketId){
@@ -21,12 +42,12 @@ class Admin extends CI_Controller {
 		$data['bracket'] = $this->Tour_model->get_bracket_by_id($bracketId);
 		$data['appliedteam'] = $this->Tour_model->get_applied_teams($bracketId);
 		$data['view'] = 'supervise_tournament';
-		$this->load->view('index', $data);
+		$this->userRedirect($data);
 	}
 	
 	public function page($view){
 		$data['view'] = $view;
-		$this->load->view('index', $data);
+		$this->userRedirect($data);
 	}
 	
 	/****************** ADMIN GENERAL ******************/
