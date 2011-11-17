@@ -118,6 +118,7 @@
 		<a href="'.base_url().'home/tournament">Turneringar</a>
 		<a href="'.base_url().'home/teams">Lag</a>
 		<a href="'.base_url().'home/users">Spelare</a>
+		<a href="'.base_url().'home/events">Events</a>
 		
 	
 	';

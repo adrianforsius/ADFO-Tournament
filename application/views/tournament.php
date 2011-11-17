@@ -181,7 +181,7 @@ if(!empty($tournament[0])){
 	echo 
 	'
 		<p>Inga LAN aktiva</p>
-		<p>Spana in tidigare turneringar klicka <a href="'.base_url().'home/events"></a></p>
+		<p>Spana in tidigare turneringar <a href="'.base_url().'home/events">här</a></p>
 	';
 	
 	

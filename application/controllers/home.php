@@ -127,6 +127,11 @@ class Home extends CI_Controller {
 		$this->userRedirect($data);
 	}
 	
+	public function events(){
+		$data['view'] = 'events';
+		$data['events'] = $this->Tour_model->get_all('lan');
+		$this->userRedirect($data);
+	}
 	
 	//under construction
 	public function invite($userId){
