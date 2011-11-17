@@ -11,23 +11,33 @@ class Home extends CI_Controller {
 	}
 	
 	public function userRedirect($data){
-		//$this->logged_in();
-		$teams = $this->Tour_model->get_officer_teams();
-		$data['lan'] = $this->Tour_model->get_active_lan();
-		if($teams){
-			$teamRequest = array();
-			foreach($teams as $i => $team){
-				$users = $this->Tour_model->get_applicants_for_team($team['id']);
-				if($users){
-					$team[] = $users;
-					$teamRequest[] = $team;
+		if($this->Tour_model->session_manager('logged_in')){
+			/*$matchWins = $this->Tour_model->get_match_wins();
+			if($matchWins){
+				$matches = 0;
+				foreach($matchWins as $i => $match){
+					$matches+= $match['amount'];
+					$matches--;
+				}
+				$data['matchWins'] = $matches;
+			}*/
+			$teams = $this->Tour_model->get_officer_teams();
+			if($teams){
+				$teamRequest = array();
+				foreach($teams as $i => $team){
+					$users = $this->Tour_model->get_applicants_for_team($team['id']);
+					if($users){
+						$team[] = $users;
+						$teamRequest[] = $team;
+					}
+				}
+				if($teamRequest){
+					$data['teamRequest'] = $teamRequest;
 				}
 			}
-			if($teamRequest){
-				$data['teamRequest'] = $teamRequest;
-			}
-			$data['userdata'] = $this->Tour_model->session_manager();
 		}
+		$data['userdata'] = $this->Tour_model->session_manager();
+		$data['lan'] = $this->Tour_model->get_active_lan();
 		$this->load->view('index', $data);
 	}
 	
@@ -37,11 +47,13 @@ class Home extends CI_Controller {
 		$brackets = $this->Tour_model->get_active_brackets();
 		$appliedTeams = array();
 		$teams = array();
-		
+	
 		//subquery solution optional
-		foreach($brackets as $index => $bracket){
-			$teams[] = $this->Tour_model->get_team_by_bracket_id($bracket['id']);
-			$appliedTeams[] = $this->Tour_model->get_applied_teams($bracket['id']);
+		if(!empty($brackets)){
+			foreach($brackets as $index => $bracket){
+				$teams[] = $this->Tour_model->get_team_by_bracket_id($bracket['id']);
+				$appliedTeams[] = $this->Tour_model->get_applied_teams($bracket['id']);
+			}
 		}
 		$data['tournament'] = array($brackets, $teams, $appliedTeams);
 		$data['gamename'] = $this->Tour_model->get_game_name();
@@ -51,7 +63,7 @@ class Home extends CI_Controller {
  
 	public function page($view){
 		$data['view'] = $view;
-		$this->userRedirect($data);
+		$this->load->view('index', $data);
 	}
 	
 	public function actions($view){
@@ -152,15 +164,16 @@ class Home extends CI_Controller {
 	public function sign_up_to_bracket(){
 		$this->logged_in();
 		if($this->input->post('teamType') == 0){
-			if(!$this->Tour_model->sign_up_team_to_bracket()){
-				$this->page('error');
+			if(!$this->Tour_model->sign_up_team_to_bracket($this->input->post('tourBracketId'))){
+			
 			}
 		}else if($this->input->post('teamType') == 1){
-			if(!$this->Tour_model->sign_up_player_to_bracket()){
+			if(!$this->Tour_model->sign_up_player_to_bracket($this->input->post('tourBracketId'))){
 				$this->page('error');
+			}else{
+				$this->tournament();
 			}
 		}
-		$this->index();
 	}
 	
 	public function apply_to_team($teamId){
@@ -283,13 +296,13 @@ class Home extends CI_Controller {
 		} else {
 			//Create account
 			$userInfo = array
-						(
-							'username' => $this->input->post('regusername'),
-							'password' => $this->input->post('regpassword'),
-							'name' => $this->input->post('regname'),
-							'lastname' => $this->input->post('reglastname'),
-							'email' => $this->input->post('regemail'),
-						);
+			(
+				'username' => $this->input->post('regusername'),
+				'password' => $this->input->post('regpassword'),
+				'name' => $this->input->post('regname'),
+				'lastname' => $this->input->post('reglastname'),
+				'email' => $this->input->post('regemail'),
+			);
 			
 			if($this->simplelogin->create($userInfo)) {
 				$this->index();	
@@ -338,7 +351,7 @@ class Home extends CI_Controller {
 			if($this->simplelogin->login($this->input->post('username'), $this->input->post('password'))) {
 				$this->index();
 			} else {
-				$this->index();
+				$this->page('error');
 			}
 		}
 	}

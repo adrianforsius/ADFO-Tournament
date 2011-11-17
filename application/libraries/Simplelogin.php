@@ -48,10 +48,9 @@ class Simplelogin{
 	 * @return	bool
 	 */
 	function create($userinfo, $auto_login = true) {
-		
+
 		//Put here for PHP 4 user
 		$this->CI =& get_instance();		
-
 		//Make sure account info was sent
 		if($userinfo['username'] == '' OR $userinfo['password'] == '') {
 			return false;
@@ -70,13 +69,15 @@ class Simplelogin{
 			//Encrypt password
 			$userinfo['password'] = $this->CI->encrypt->encode($userinfo['password']);
 			//Insert account into the database
-			$data = array(
-						'username' => $userinfo['username'],
-						'password' => $userinfo['password'],
-						'name' => $userinfo['name'],
-						'lastname' => $userinfo['lastname'],
-						'email' => $userinfo['email'],
-					);
+			$data = array
+			(
+				'username' => $userinfo['username'],
+				'password' => $userinfo['password'],
+				'name' => $userinfo['name'],
+				'lastname' => $userinfo['lastname'],
+				'email' => $userinfo['email'],
+			);
+			
 			$this->CI->db->set($data); 
 			if(!$this->CI->db->insert($this->user_table)) {
 				//There was a problem!
@@ -84,21 +85,24 @@ class Simplelogin{
 			}
 			$user_id = $this->CI->db->insert_id();
 			
-			$sql =
-			'
-				INSERT INTO team (name)
-				VALUES( "'.$userinfo['username'].'")
-			';
+			$data = array
+			(
+				'name' => $userinfo['username'],
+			);
+			$this->CI->db->insert('team', $data);
 			
-			$this->CI->db->query($sql);
 			$team_id = $this->CI->db->insert_id();
 			
-			$sql =
-			'
-				INSERT INTO user__register__team (user_id, team_id, player)
-				VALUES ("'.$user_id.'", "'.$team_id.'", 1)
-			';
-			$this->CI->db->query($sql);
+			$data = array
+			(
+				'user_id' => $user_id,
+				'team_id' => $team_id,
+				'player' => 1,
+				'active' => 1,
+				'officer' => 1,
+			);
+			
+			$this->CI->db->insert('user__register__team', $data);
 			
 			//Automatically login to created account
 			if($auto_login) {		
@@ -161,7 +165,7 @@ class Simplelogin{
 		//Put here for PHP 4 user
 		$this->CI =& get_instance();	
 		
-
+		
 		//Make sure login info was sent
 		if($user == '' OR $password == '') {
 			return false;
@@ -197,19 +201,16 @@ class Simplelogin{
 			//Set session data
 			$this->CI->session->set_userdata($row);
 			
-			$sql = 
-			'
-				SELECT team.*
-				FROM team, user__register__team, user
-				WHERE team.id = user__register__team.team_id
-					AND user__register__team.user_id = user.id
-					AND user.id = '.$this->CI->session->userdata('id').'
-					AND player = 1
-			';
+			$this->CI->db->select('team.*');
+			$this->CI->db->from('user__register__team');
+			$this->CI->db->join('team', 'team.id = user__register__team.team_id');
+			$this->CI->db->join('user', 'user.id = user__register__team.user_id');
+			$this->CI->db->where(array('user.id' => $this->CI->session->userdata('id'), 'player' => 1));
+			$query = $this->CI->db->get();
+
+			$team = $query->row_array();
 			
-			$query = $this->CI->db->query($sql);
-			$team = $query->result_array();
-			$this->CI->session->set_userdata(array('team' => $team));
+			$this->CI->session->set_userdata(array('team' => $team['id']));
 			
 			//Set logged_in to true
 			$this->CI->session->set_userdata(array('logged_in' => true));			

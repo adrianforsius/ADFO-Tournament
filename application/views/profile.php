@@ -5,12 +5,14 @@
 	<div id="profilemain">
 		<h1><?php echo '<a href="'.base_url().'home/edit_profile/'.$userdata['id'].'">Editera profil</a>'; ?></h1>
 		<p>Username: <?php echo $userdata['username'] ?></p>
-		<p>Email: <?php echo $userdata['email'] ?></p>
+		<p>Email: <?php //echo $userdata['email'] ?></p>
 		<p>Name: <?php echo $userdata['name'] ?></p>
 		<p>Teams:
 		<?php 
-		foreach($teams as $index => $team) {
-			echo '<a href="'.base_url().'home/team/'.$team['id'].'">'.$team['name'].'</a><a class="cross delete" href="'.base_url().'home/leave_team/'.$team['id'].'"></a>';
+		if($teams){
+			foreach($teams as $index => $team) {
+				echo '<a href="'.base_url().'home/team/'.$team['id'].'">'.$team['name'].'</a><a class="cross delete" href="'.base_url().'home/leave_team/'.$team['id'].'"></a>';
+			}
 		}
 		echo '<a href="#">'.$userdata['username'].'</a>';
 		?> 

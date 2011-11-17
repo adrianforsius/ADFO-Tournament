@@ -72,7 +72,7 @@ echo
 							}else{
 								echo
 								'
-										<a style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif; float: right" href="'.base_url().'admin/delete_team_position/'.$bracket[1][$index]['match_id'].'/'.$bracket[0]['id'].'">Delete</a>
+										<a style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif; float: right" href="'.base_url().'admin/delete_team_position/'.$teams[$index]['match_id'].'/'.$bracket['id'].'">Delete</a>
 								';
 							}
 							

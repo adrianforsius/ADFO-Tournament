@@ -664,7 +664,6 @@ a:hover{
 }
 .tournamentInfo{
 	display: none;
-	height: 220px;
 	width: 960px;
 	background: url('../img/bg.jpg') repeat-x 100%;
 }

@@ -3,8 +3,8 @@
 echo 
 '
 <div id="regform">
-	<h3>Registerar ny användare</h3>
-	<from action="'.base_url().'home/create_login" method="post" id="regForm">
+	<h3>Registrera ny användare</h3>
+	<form action="'.base_url().'home/create_login" method="post" id="regForm">
 		<label for="regusername">Username: </label>
 		<br>
 		<input type="text" name="regusername" /> 
@@ -31,6 +31,6 @@ echo
 		<br>
 		<input type="submit" name="regloginregister" />
 		<br>	
-	</from>
+	</form>
 </div>
 ';

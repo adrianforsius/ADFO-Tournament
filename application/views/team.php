@@ -17,10 +17,10 @@
 		}
 	}
 	if(!$isMember){
-		echo 
+		/*echo 
 		'
 			<a href="'.base_url().'home/apply_to_team/'.$teamInfo['id'].'">apply to team</a>
-		';
+		';*/
 	}
 	echo '<br>';
 	echo '<br>';

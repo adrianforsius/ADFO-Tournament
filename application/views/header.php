@@ -9,7 +9,7 @@
 <meta http-equiv="Content-Type" content="text/html" charset="uft-8">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style-1.0.css" type="text/css" />
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-<title>Welcome to CodeIgniter</title>
+<title>Lanfabrikens Tournaments!</title>
 </head>
 <body>
 <div id="loginBox">
@@ -31,7 +31,8 @@
 								}
 								
 							echo '</td>
-						</tr>
+						</tr>';
+						/*
 						<tr>
 							<td>Vunna turneringar: </td>
 							<td>';
@@ -39,7 +40,8 @@
 									echo $tourWins.' vunna matcher';
 								}
 							echo '</td>
-						</tr>
+						</tr>*/
+						echo '
 					</table>
 					<table class="stats">
 						<tr>
@@ -113,7 +115,7 @@
 		 
 	
 	<div id="nav">
-		<a href="'.base_url().'home/tournament">tournaments</a>
+		<a href="'.base_url().'home/tournament">Turneringar</a>
 		<a href="'.base_url().'home/teams">Lag</a>
 		<a href="'.base_url().'home/users">Spelare</a>
 		
@@ -121,15 +123,18 @@
 	';
 	if($this->session->userdata('logged_in')){
 		if($this->session->userdata('authority') == 5){
+			/*
 			echo 
 			'
 					<a href="'.base_url().'admin/page/create_tournament">Skapa ny turnering</a>
-				
 			';
+			*/ 
 		}
-		echo 
+		/*echo 
 		'
-				<a href="'.base_url().'home/actions/register_team">Skapa nytt lag</a>
+				<a href="'.base_url().'home/actions/register_team">Skapa nytt lag</a>';
+		*/
+		echo '
 				<a href="'.base_url().'home/profile">Min profil</a>
 			</div>
 		';
@@ -137,7 +142,7 @@
 	}else{
 		echo 
 		'
-				<a href="'.base_url().'home/page/register">registrera</a>
+				<a href="'.base_url().'home/page/register">Registrera</a>
 			</div>
 		';	
 	}

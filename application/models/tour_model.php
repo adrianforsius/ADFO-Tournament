@@ -3,6 +3,7 @@ class Tour_model extends CI_Model {
 	function __construct(){
 		parent::__construct();
 	}
+	
 	function advance_team($teamId, $position){
 		$data = array
 		(
@@ -259,7 +260,7 @@ class Tour_model extends CI_Model {
 	
 	//Subquery FML
 	function get_teams_by_user_and_size($size){
-		$sql = 
+		/*$sql = 
 		'
 			SELECT team.*
 			FROM
@@ -281,7 +282,19 @@ class Tour_model extends CI_Model {
 		if(!empty($teamName)){
 			return $teamName;
 		}
-		return false;
+		return false;*/
+		$join = array
+		(
+			'user' => 'user.id = user__register__team.user_id',
+			'team' => 'team.id = user__register__team.team_id',
+		);
+		$where = array
+		(
+			'user.id' => $this->session_manager('id'),
+		);
+		
+		$result = $this->join('*','user__register__team', $join, $where);
+		return $this->result_contain($result);
 	}
 	
 	function get_teams_by_bracket_id(){
@@ -341,20 +354,14 @@ class Tour_model extends CI_Model {
 	
 	function get_all($table){
 		$query = $this->db->get($table);
-		$data = $query->result_array();
-		if(!empty($data)){
-			return $data;
-		}
-		return false;
+		$result = $query->result_array();
+		return $this->result_contain($result);
 	}
 	
 	function get_all_pagination($table, $num, $offset){
 		$query = $this->db->get($table, $num, $offset);
 		$result = $query->result_array();	
-		if($result){
-			return $result;
-		}
-		return false;
+		return $this->result_contain($result);
 	}
 		
 	function get_applied_teams($bracketId){
@@ -378,6 +385,18 @@ class Tour_model extends CI_Model {
 	
 	function get_bracket_by_id($bracketId){
 		$result = $this->get_item_by_id('bracket', $bracketId);
+		return $this->result_contain($result);
+	}
+	
+	function get_match_wins(){
+		$sql =
+		'
+			SELECT count(*) AS amount FROM `tour_team__attend__bracket`
+			WHERE team_id = '.$this->session_manager('team').'
+		';
+		$query = $this->db->query($sql);
+		$result = $query->result_array();
+		//print_r($result);
 		return $this->result_contain($result);
 	}
 	
@@ -458,36 +477,31 @@ class Tour_model extends CI_Model {
 		return false;
 	}
 	
-	function sign_up_player_to_bracket(){
-		$userInfo = $this->session_manager();
+	function sign_up_player_to_bracket($bracketId){
 		$join = array
 		(
 			'team' => 'team.id = team__attend__bracket.team_id',
 		);
 		$where = array
 		(
-			
+			'team_id' => $this->session_manager('team'),
+			'bracket_id' => $bracketId
 		);
-		$join->select('*', 'team__attend__bracket', $join, $where);
+		$result = $this->join('*', 'team__attend__bracket', $join, $where);
 		
-		$sql =
-		'
-			SELECT *
-			FROM team__attend__bracket
-			ON team__attend__bracket.team_id = team.id
-			WHERE bracket_id = '.$this->input->post('tourBracketId').'
-		';
-		$query = $this->db->query($sql);
-		$result = $query->result_array();
-		if(!$this->result_contain($result)){
+		$result = $this->result_contain($result); 
+		
+		if(empty($result)){
 			$data = array
 			(
 				'team_id' => $this->session_manager('team'),
+				'bracket_id' => $this->input->post('tourBracketId'),
+				'position' => 0,
 				 
 			);
-			$this->insert('team__attend__bracket', $data);
+			$result = $this->insert('team__attend__bracket', $data);
+			return $this->result_contain($result);
 		}
-		
 		return false;
 	}
 	
