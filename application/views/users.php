@@ -11,12 +11,13 @@
 * */
 echo
 '
+<div id="main"> 
 	<div class="pageHolder">
 	<div class="page">
 ';
 $count = 0;
 foreach($data as $record => $user){
-	if($count%11 == 10){
+	if($count%10 == 0){
 		echo
 		'
 			</div>
@@ -35,4 +36,5 @@ echo
 	</div>
 	</div>
 ';	
-echo '<div class="pagination">'.$pagination.'</div>';
+echo '<div class="pagination">'.$pagination.'</div>
+</div>';

@@ -2,6 +2,7 @@
 //print_r($userdata);
 echo
 '
+<div id="main">
 	<form>
 		<label for="email">Email: </label>
 		<br>
@@ -21,7 +22,6 @@ echo
 		<br>
 		<input type="submit" value="Ändra profil" name="editProfileSubmit" />
 	</form>
-
-
+</div>
 
 '; 

@@ -11,8 +11,65 @@ class Home extends CI_Controller {
 	}
 	
 	public function userRedirect($data){
-		if($this->Tour_model->session_manager('logged_in')){
-			/*$matchWins = $this->Tour_model->get_match_wins();
+		$data['userdata'] = $this->Tour_model->session_manager();
+		$data['lan'] = $this->Tour_model->get_active_lan();
+		$this->load->view('index', $data);
+	}
+	
+	public function error($message){
+		$data['view'] = 'error';
+		$data['message'] = $message;
+		$this->load->view('index', $data);
+	}
+	
+	/****************** LOAD VIEWS ******************/
+	
+	public function tournament($lanId = null){
+		if($lanId != null){
+			$brackets = $this->Tour_model->get_brackets($lanId);
+		}else{
+			$brackets = $this->Tour_model->get_brackets();
+		}
+		$appliedTeams = array();
+		$teams = array();
+		
+		//subquery solution optional
+		if(!empty($brackets)){
+			foreach($brackets as $index => $bracket){
+				$teams[] = $this->Tour_model->get_team_by_bracket_id($bracket['id']);
+				$appliedTeams[] = $this->Tour_model->get_applied_teams($bracket['id']);
+			}
+		}
+		$data['tournament'] = array($brackets, $teams, $appliedTeams);
+		$data['gamename'] = $this->Tour_model->get_game_name($lanId);
+		$data['view'] = 'tournament';
+		$this->userRedirect($data);
+	}
+ 
+	public function page($view){
+		$data['view'] = $view;
+		$this->load->view('index', $data);
+	}
+	
+	public function events(){
+		$data['view'] = 'events';
+		$data['events'] = $this->Tour_model->get_all('lan');
+		$this->load->view('index', $data);
+	}
+	
+	public function actions($view){
+		$this->logged_in();
+		$data['userdata'] = $this->Tour_model->session_manager();
+		$data['view'] = $view;
+		$this->load->view('index', $data);
+	}
+	
+	public function user($id){
+		$data['view'] = 'user';
+		if($this->Tour_model->session_manager('logged_in') && $this->Tour_model->session_manager('id') == $id){
+			$this->profile();
+			/*
+			$matchWins = $this->Tour_model->get_match_wins();
 			if($matchWins){
 				$matches = 0;
 				foreach($matchWins as $i => $match){
@@ -20,8 +77,8 @@ class Home extends CI_Controller {
 					$matches--;
 				}
 				$data['matchWins'] = $matches;
-			}*/
-			$teams = $this->Tour_model->get_officer_teams();
+			}
+			 $teams = $this->Tour_model->get_officer_teams();
 			if($teams){
 				$teamRequest = array();
 				foreach($teams as $i => $team){
@@ -34,52 +91,10 @@ class Home extends CI_Controller {
 				if($teamRequest){
 					$data['teamRequest'] = $teamRequest;
 				}
-			}
-		}
-		$data['userdata'] = $this->Tour_model->session_manager();
-		$data['lan'] = $this->Tour_model->get_active_lan();
-		$this->load->view('index', $data);
-	}
-	
-	/****************** LOAD VIEWS ******************/
-	
-	public function tournament(){
-		$brackets = $this->Tour_model->get_active_brackets();
-		$appliedTeams = array();
-		$teams = array();
-	
-		//subquery solution optional
-		if(!empty($brackets)){
-			foreach($brackets as $index => $bracket){
-				$teams[] = $this->Tour_model->get_team_by_bracket_id($bracket['id']);
-				$appliedTeams[] = $this->Tour_model->get_applied_teams($bracket['id']);
-			}
-		}
-		$data['tournament'] = array($brackets, $teams, $appliedTeams);
-		$data['gamename'] = $this->Tour_model->get_game_name();
-		$data['view'] = 'tournament';
-		$this->userRedirect($data);
-	}
- 
-	public function page($view){
-		$data['view'] = $view;
-		$this->load->view('index', $data);
-	}
-	
-	public function actions($view){
-		$this->logged_in();
-		$data['userdata'] = $this->Tour_model->session_manager();
-		$data['view'] = $view;
-		$this->userRedirect($data);
-	}
-	
-	public function user($id){
-		$data['view'] = 'user';
-		if($this->Tour_model->session_manager('logged_in') && $this->Tour_model->session_manager('id') == $id){
-			$this->profile();
+			}*/
 		}else{
 			$data['data'] = $this->Tour_model->get_item_by_id('user', $id);
-			$this->userRedirect($data);
+			$this->load->view('index', $data);
 		}
 	}
 	
@@ -127,11 +142,6 @@ class Home extends CI_Controller {
 		$this->userRedirect($data);
 	}
 	
-	public function events(){
-		$data['view'] = 'events';
-		$data['events'] = $this->Tour_model->get_all('lan');
-		$this->userRedirect($data);
-	}
 	
 	//under construction
 	public function invite($userId){
@@ -157,9 +167,8 @@ class Home extends CI_Controller {
 	
 	/****************** USER LOGGED IN FUNCS ******************/
 	public function apply_to_tournament($bracketId){
-		$this->logged_in();
-		$bracket = $this->Tour_model->get_active_brackets($bracketId);
-		$data['teams'] = $this->Tour_model->get_teams_by_user_and_size($bracket[0]['team_size']);
+		$bracket = $this->Tour_model->get_bracket_by_id($bracketId);
+		$data['teams'] = $this->Tour_model->get_teams_by_user_and_size($bracket['team_size']);
 		$data['bracket'] = $bracket;
 		$data['userInfo'] = $this->Tour_model->session_manager();
 		$data['view'] = 'apply_to_tournament';
@@ -167,17 +176,21 @@ class Home extends CI_Controller {
 	}
 	
 	public function sign_up_to_bracket(){
-		$this->logged_in();
 		if($this->input->post('teamType') == 0){
 			if(!$this->Tour_model->sign_up_team_to_bracket($this->input->post('tourBracketId'))){
-			
+				$this->error('Unable to sign up team to bracket');
+			}else{
+				$this->index();
 			}
 		}else if($this->input->post('teamType') == 1){
 			if(!$this->Tour_model->sign_up_player_to_bracket($this->input->post('tourBracketId'))){
-				$this->page('error');
+				$this->error('Unable to sign up player to bracket');
 			}else{
-				$this->tournament();
+				$this->index();
 			}
+		}else if($this->input->post('teamType') == 2){
+			$this->Tour_model->sign_up_guest_to_bracket($this->input->post('guestName'));
+			$this->index();
 		}
 	}
 	
@@ -191,7 +204,7 @@ class Home extends CI_Controller {
 		if($this->Tour_model->leave_team($teamId)){
 			$this->profile();
 		}
-		$this->page('error');
+		$this->error('Unable to leave team');
 	}
 	
 	public function create_team(){
@@ -264,7 +277,7 @@ class Home extends CI_Controller {
 		}else if($this->Tour_model->session_manager('logged_in')){
 			return;
 		}
-		$this->page('error');
+		$this->error('Unable to check if logged in');
 	}
 	
 	
@@ -312,7 +325,7 @@ class Home extends CI_Controller {
 			if($this->simplelogin->create($userInfo)) {
 				$this->index();	
 			} else {
-				$this->page('error');			
+				$this->error('Unable to create user');			
 			}			
 		}
 	}
@@ -332,6 +345,7 @@ class Home extends CI_Controller {
 		}else if($this->input->post('logoutsubmit')){
 			$this->logout();
 		}
+		redirect('/home/tournament/', 'refresh');
 	}
 	
 	//Login with validation
@@ -356,7 +370,7 @@ class Home extends CI_Controller {
 			if($this->simplelogin->login($this->input->post('username'), $this->input->post('password'))) {
 				$this->index();
 			} else {
-				$this->page('error');
+				$this->error('Unable to login');
 			}
 		}
 	}

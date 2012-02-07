@@ -1,12 +1,14 @@
 
-	<div id="tabs">
-		<ul class="tabNavigation">
+	<ul id="tabs">
 			<?php
 				if(!empty($gamename)){
 					foreach($gamename as $nameindex => $name){
-						echo '<li value="'.$name['arena'].'"><a>'.$name['name'].'</a></li>';
+						echo '
+						<li value="'.$name['arena'].'">'.$name['name'].'</li>
+						<br>
+						<br>
+						';
 					}
-				}
+				}//$name['arena']
 			?>
-		</ul>
-	</div>
+	</ul>

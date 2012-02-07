@@ -1,11 +1,13 @@
 body{
 	font: verdana, helvetica, sans-serif, bold;
 	background-color: #fff;
-	background: url('../img/lfbg.png');
+	background: url('../images/lfbg.png');
 	min-width: 960px;
 	font: 13px/20px normal Helvetica, Arial, sans-serif;
 	color: #4F5155;
 	overflow-y:scroll;
+	display: block;
+	margin: 12px 5px;
 }
 table {
   border-collapse: collapse;
@@ -382,18 +384,21 @@ a{
 	::webkit-selection{ background-color: #E13300; color: white; }
 
 a:hover{
-	color: white;
+	color: yellow;
 }	
-
 
 #content{
 	margin: 10px auto;
 	width: 960px;
 	color: #fff;
-	background-color: #262626;
+	/*background-color: #262626;*/
 	margin-top: 40px;
 	margin-bottom: 40px;
 	clear: both;
+}
+#content a{
+	padding: 0;
+	margin: 5px 10px;
 }
 
 .bracketHolder{
@@ -401,9 +406,8 @@ a:hover{
 }
 
 #tabs{
-	background:	url('../img/lfbg.png');
+	/*background:	url('../images/lfbg.png');*/
 	margin: 0;
-	height: 30px;
 }
 #control{
 	float: left;
@@ -414,17 +418,20 @@ a:hover{
 	color: #fff;
 	background-color: #262626;
 	margin: 0 auto;
-	height: 340px;
 }
 #nav{
 	float: left;
-	height: 20px;
+	background-color: #262626;
+	width: 960px;
+	margin-bottom: 10px;
 }
 #nav a{
-	/*background: url("../img/lfbg.png");*/
+	/*background: url("../images/lfbg.png");*/
 	background: #262626;
 	margin-right: 10px;
 	float: left;
+	text-transform: uppercase;
+	font-family: proxima, proxima-nova-1, verdana;
 }
 #profilesidebar h1, #profilesidebar p{
 	margin: 10px 30px;
@@ -435,7 +442,7 @@ a:hover{
 #profilemain{
 	width: 710px;
 }
-.profileImg{
+.profile{
 	width:80px;
 	overflow: hidden;
 	height:95px;
@@ -578,29 +585,38 @@ a:hover{
 }
 
 /*-----------regform---------*/
-#regform{
-	margin: 20px 50px;
+.niceForm{
+	margin: 20px 50px 0 50px;
 	height: 500px;
 	width: 900px;
 }
 #loginFormBox{
-	width: 900px;
-	height: 110px;
-	float: left;
+	float: right;
 }
 #loginFormBox td{
 	width: 13em;
 }
 #loginForm{
-	margin: 5px 290px;
-	width: 320px;
+	float: right;
+}
+#loginForm label, #loginForm input{
 	float: left;
+	font-size: 14px;
 }
 #loginForm label{
-	margin-left: 60px;
-	float: left;
-	height: 24px;
-	font-size: 18px;
+	padding: 5px 8px;
+}
+#loginForm input{
+	margin-top: 5px;
+	height: 15px;
+	width: 60px;
+}
+#loginForm .lineBtn{
+	width: 60px;
+	height: 25px;
+	/*background: url('../images/icons/turnOff.jpg');*/
+	float: right;
+	margin: 3px 5px;
 }
 #loginUserBox{
 	height: 100px;
@@ -623,7 +639,7 @@ a:hover{
 }
 #tournament{
 	height: 625px;
-	background: url("../img/farcry.jpg");
+	background: url("../images/farcry.jpg");
 }
 .superviseTournament .colo p,
 .superviseTournament .colo input,
@@ -633,30 +649,48 @@ a:hover{
 	padding: 2px;
 	float: left;
 }
+#content .superviseTournament .player div{
+	display: inline;
+}
+#content .superviseTournament form{
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
 #tourFooter{
 	background-color: #262626;
-	height: 35px;
 	clear: both;
 }
 #teamApply{
-	margin-left: 10px;
+	background: #666;
 }	
-#teamApply p, #teamApply h3{
-	margin-top: 5px;
-	margin-bottom: 5px;
+#content #teamApply p, #content #teamApply h3{
+	margin: 0;
+	padding: 5px 20px;
+	color: #FDD017;
 }
-.tabNavigation li{
-	background: grey;
-	padding: 5px 8px;
-}
-.tabNavigation a{
+#content #teamApply a{
 	color: white;
 }
-.tabNavigation .show{
-	background: black;
+#content #teamApply a:hover{
+	color: yellow;
 }
-#tourApplyForm{
+
+#content #tabs li{
+	margin: 0;
+	padding: 10px 10px;
+	background: grey;
+	color: white;
 	float: left;
+	line-height: 20px;
+	font-size: 20px;
+}
+#content #tabs .show{
+	background: black;
+	color: white;
+}
+
+#tourApplyForm{
 	clear: both;
 }	
 .officer{
@@ -665,11 +699,11 @@ a:hover{
 .tournamentInfo{
 	display: none;
 	width: 960px;
-	background: url('../img/bg.jpg') repeat-x 100%;
+	background: url('../images/bg.jpg') repeat-x 100%;
 }
 .tabTable{
 	font: 16px helvetica;
-	margin: 20px 50px;
+	margin: 0px 50px;
 }
 .tabTable tr{
 	height: 30px;
@@ -686,6 +720,11 @@ tr td{
 	float: left;
 	height: 80px;
 }
+.lineTable{
+	margin: 5px;
+	float: right;
+	height: 10px;
+}
 .messages{
 	float: right;
 	height: 80px;
@@ -698,24 +737,19 @@ tr td{
 	height: 32px;
 	padding: 1px 8px;
 	margin-right: 8px;
-	background: url('../img/icons/GIF/004.gif');
+	background: url('../images/icons/GIF/004.gif');
 }
 .accept{
 	width: 32px;
 	height: 32px;
 	padding: 1px 8px;
 	margin-right: 8px;
-	background: url('../img/icons/GIF/006.gif');
+	background: url('../images/icons/GIF/006.gif');
 }
-.turnOff{
-	width: 100px;
-	height: 100px;
-	/*background: url('../img/icons/turnOff.jpg');*/
-	float: right;
-}
+
 #headerImg{
 	float: left;
-	background: url('../img/lanfab.png');
+	background: url('../images/lanfab.png');
 	width: 960px;
 	height: 200px;
 }
@@ -723,13 +757,6 @@ tr td{
 	position: relative;
 	left: 30px;
 	top: 10px;
-}
-
-.loginBtn{
-	width: 100px;
-	height: 100px;
-	/*background: url('../img/icons/turnOff.jpg');*/
-	float: right;
 }
 .page{
 	float: left;
@@ -746,4 +773,93 @@ tr td{
 }		
 .current{
 	display: block;
+	color: white;
+}
+.nextlan{
+	background: url('../images/next.jpg');
+	width: 960px;
+	height: 200px;
+}
+
+#content a{
+	padding: 0;
+}
+#content a,
+#content p,
+#content h1,
+#content h2,
+#content h3,
+#content img,
+#content form,
+#content table{
+	margin: 0px 20px;
+	padding: 5px 0px;
+}
+#content .promo, #content .promo img{
+	padding: 0;
+	margin: 0;
+}
+.warning{
+	color: red;
+}
+.tourbotton{
+	color: green;
+	height: 48px;
+	font: verdana;
+	font-size: 20px;
+	margin: 10px;
+}
+.choicePanel{
+	margin: 0 auto;
+	height: 32px;
+	background: url('../images/icons/shade1.png') repeat-x;
+}
+.choicePanelReverse{
+	margin: 0 auto;
+	height: 32px;
+	background: url('../images/icons/shade2.png') repeat-x;
+}
+.universePanel{
+	width: 450px;
+	margin: 0 auto;
+	color: black;
+}	
+
+#content .settings{
+	background: url('../images/icons/gear.png') no-repeat white;
+	padding: 6px 5px 6px 32px;
+	float: right;
+	margin: 0;
+	color: black;
+	font-family: verdana;
+	font-weight: 600;
+	display: block;
+} 
+#content .apply{
+	background: url('../images/icons/download.png') no-repeat #5EFB6E;
+	padding: 6px 5px 6px 32px;
+	float: left; 
+	margin: 0;
+	color: black;
+	font-family: verdana;
+	font-weight: 600;
+	display: block;
+}
+#content .edit{
+	background: url('../images/icons/edit') no-repeat white;
+	padding: 6px 5px 6px 32px;
+	color: black;
+	font-family: verdana;
+	font-weight: 600;
+	display: inline;
+	
+}
+#tournament a{
+	color: white;
+}
+#tournament a:hover{
+	color: yellow;
+}
+#main{
+	background-color: #262626;
 }

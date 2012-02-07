@@ -15,93 +15,6 @@
 <div id="loginBox">
 		<div id="loginFormBox">
 	<?php	
-	if($this->session->userdata('logged_in')){
-				echo 
-				'
-					<table class="stats">
-						<tr>
-							<td>Du är inloggad som: </td>
-							<td>'.$this->session->userdata('username').'</td>
-						</tr>
-						<tr>
-							<td>Vunna matcher: </td>
-							<td>';
-								if(!empty($matchWins)){
-									echo $matchWins.' vunna matcher';
-								}
-								
-							echo '</td>
-						</tr>';
-						/*
-						<tr>
-							<td>Vunna turneringar: </td>
-							<td>';
-								if(!empty($tourWins)){
-									echo $tourWins.' vunna matcher';
-								}
-							echo '</td>
-						</tr>*/
-						echo '
-					</table>
-					<table class="stats">
-						<tr>
-							<td>Ansökanden: </td>
-							<td>';
-							if(!empty($applys)){
-								echo $applys.'st obesvarade ansökningar';
-							}
-							echo
-							'</td>
-						</tr>
-						<tr>
-							<td>Förfrågningar: </td>
-							<td>';
-							if(!empty($teamRequest)){
-								$teams = count($teamRequest[0][0]);
-								echo 
-								'
-									<a href="'.base_url().'home/profile">'.($teams/2).' lag och '.$teams.' förfrågningar </a>
-								';
-							}
-							
-							echo'
-							</td>
-						</tr>
-						<tr>
-							<td>Invites: </td>
-							<td>';
-								if(!empty($invites)){
-									echo $invites.'st osvarde invites';
-								}
-								
-							echo ' </td>
-						</tr>
-					</table>
-				';
-				echo
-				'
-					<form action="'.base_url().'home/loginsubmit" method="post" id="logoutForm">
-						<input type="submit" name="logoutsubmit" class="turnOff" value ="logout" />
-					</form>
-				';
-		
-	}else{
-		echo
-		'
-			<form id="loginForm" method="post" action="'.base_url().'home/loginsubmit">
-				<input class="loginBtn" type="submit" name="loginsubmit" value="login" />
-				<label class="loginBox" for="username">Username:</label>
-				<br>
-				<input class="loginBox" type="text" name="username" />		
-				<br>
-				<label class="loginBox" for="password">Password:</label>
-				<br>
-				<input class="loginBox" type="password" name="password" />
-			</form>
-		';
-
-	}
-	
 	echo 
 	'
 		</div>
@@ -115,10 +28,9 @@
 		 
 	
 	<div id="nav">
-		<a href="'.base_url().'home/tournament">Turneringar</a>
-		<a href="'.base_url().'home/teams">Lag</a>
+		<a href="'.base_url().'home/tournament">Hem</a>
 		<a href="'.base_url().'home/users">Spelare</a>
-		<a href="'.base_url().'home/events">Events</a>
+		<a href="'.base_url().'home/events">Andra LAN</a>
 		
 	
 	';
@@ -129,7 +41,11 @@
 			'
 					<a href="'.base_url().'admin/page/create_tournament">Skapa ny turnering</a>
 			';
-			*/ 
+			*/
+			/*echo 
+			'
+					<a href="'.base_url().'admin/control_panel">Kontroll panel</a>
+			';*/
 		}
 		/*echo 
 		'
@@ -137,17 +53,42 @@
 		*/
 		echo '
 				<a href="'.base_url().'home/profile">Min profil</a>
-			</div>
 		';
 		//ska modellen hämta informationen via controllen eller ska den skickas med direkt till kontrollen som ovanför?, user fråga, säkerhetsfråga	
 	}else{
 		echo 
 		'
 				<a href="'.base_url().'home/page/register">Registrera</a>
-			</div>
 		';	
 	}
+	if($this->session->userdata('logged_in')){
+		echo
+		'
+			<form action="'.base_url().'home/loginsubmit" method="post" id="loginForm">
+				<input type="submit" name="logoutsubmit" class="lineBtn" value ="logout" />
+			</form>
+			<table class="lineTable">
+				<tr>
+					<td>Du är inloggad som: </td>
+					<td>'.$this->session->userdata('username').'</td>
+				</tr>
+			</table>
+			
+		';
+	}else{
+		echo
+		'
+			<form id="loginForm" method="post" action="'.base_url().'home/loginsubmit">
+				<input class="lineBtn" type="submit" name="loginsubmit" value="login" />
+				<label for="username">Username:</label>
+				<input type="text" name="username" />		
+				<label for="password">Password:</label>
+				<input type="password" name="password" />
+			</form>
+		';
+	}
 	echo '
+	</div>
 		</div>
 		<div id="content">
 	';

@@ -1,9 +1,11 @@
 $(function(){
 	$('.current').show();
-
+	$('#nav a').click(function(){
+		$(this).addClass('current');
+	});
 	//$("div#bracketHolder > div").hide();
 	//$("#stTournament").show();
-	$(".tabNavigation li:first-child").addClass("show");
+	$("#tabs li:first-child").addClass("show");
 	
 	
 	$('.delete').click(function(){

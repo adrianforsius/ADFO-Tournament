@@ -2,7 +2,6 @@
 //$this->load->view('tabs');
 echo 
 '
-	<div>
 		<div id="tournament" class="superviseTournament"
 ';
 	if(!empty($bracket[0]['special_image'])){
@@ -57,10 +56,10 @@ echo
 						if($value['position'] == ($base+$e)){
 							echo
 							'	
-								<div style="width: 70px; overflow: hidden; height: '.$playerHeight.'px; float: left">
+								<div style="width: 70px; overflow: hidden; height: '.$playerHeight.'px">
 									<p style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif" id="'.($base+$e).'">'.$teams[$index]['name'].' '.($base+$e).'</p>
 								</div>
-								<div style="float: right">
+								<div>
 							';
 							
 							if($i == 1){
@@ -79,7 +78,8 @@ echo
 							echo
 							'
 										<input type="hidden" name="teamId_'.($base+$e).'" value="'.$teams[$index]['team_id'].'" />
-										<input type="text" name="team_'.($base+$e).'" size="'.(32/$bracket['size']).'" style="height:'.(48/($colo+1)).'px; margin: -3px" />
+										<input type="hidden" name="matchId_'.($base+$e).'" value="'.$teams[$index]['match_id'].'" />
+										<input type="text" name="team_'.($base+$e).'" size="'.(32/$bracket['size']).'" style="height:'.(48/($colo+1)).'px; padding: '.($playerHeight/4).'" />
 								</div>
 							';
 						}
@@ -128,6 +128,8 @@ if(!empty($appliedteam)){
 		echo
 		'	
 			</select>
+			<a href="'.base_url().'admin/delete_applied_team/'.$teamInfo['id'].'/'.$bracket['id'].'" class="cross"></a>
+	
 			<input type="hidden" name="teamId_'.$index.'" value="'.$teamInfo['id'].'" />
 			
 			<br>
@@ -138,7 +140,6 @@ if(!empty($appliedteam)){
 			<input type="hidden" name="bracketId" value="'.$bracket['id'].'" />
 			<input type="submit" value="placera" name="submitTeamPlace" />
 		</form>
-		</div>
 	';
 }
 echo

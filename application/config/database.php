@@ -47,12 +47,12 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = 'root';
-$db['default']['database'] = 'beatiumc_tournament';
+$db['default']['hostname'] = 'mysql.sverok.net';
+$db['default']['username'] = 'lanfabriken';
+$db['default']['password'] = 'G18PRzqY';
+$db['default']['database'] = 'lanfabriken';
 $db['default']['dbdriver'] = 'mysql';
-$db['default']['dbprefix'] = '';
+$db['default']['dbprefix'] = 'tour_';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
 $db['default']['cache_on'] = FALSE;

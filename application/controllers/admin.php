@@ -50,6 +50,12 @@ class Admin extends CI_Controller {
 		$this->userRedirect($data);
 	}
 	
+	public function control_panel(){
+		$data['view'] = 'control_panel';
+		$data['controldata'] = $this->Tour_model->get_all_admin_data();
+		$this->userRedirect($data);
+	}
+	
 	/****************** ADMIN GENERAL ******************/
 	
 	function update_tournament($bracketId){
@@ -95,6 +101,11 @@ class Admin extends CI_Controller {
 		redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 	}
 	
+	public function delete_applied_team($teamId, $bracketId){
+		$this->Tour_model->delete_applied_team($teamId, $bracketId);
+		redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
+	}
+	
 	//Approve team applicant
 	public function place_team(){
 		$bracketId = $this->input->post('bracketId');
@@ -127,7 +138,7 @@ class Admin extends CI_Controller {
 		redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 	}
 	
-	function match_stats($bracketId, $base, $current = 1){
+	function match_stats($bracketId, $base, $current = 1, $fill = array()){
 		$this->is_admin();
 		
 		$team1Points = $this->input->post('team_'.$current);
@@ -136,25 +147,37 @@ class Admin extends CI_Controller {
 		$team1Id = $this->input->post('teamId_'.$current);
 		$team2Id = $this->input->post('teamId_'.($current+1));
 		
+		$match1Id = $this->input->post('matchId_'.$current);
+		$match2Id = $this->input->post('matchId_'.($current+1));
+		
+		$fill[] = $team1Points;
+		$fill[] = $team2Points;
+		$fill[] = $team1Id;
+		$fill[] = $team2Id;
+		$fill[] = $match1Id;
+		$fill[] = $match2Id;
 		//the jump
 		$position = (($base-(floor($current/2)))+$current);
 		
-		if(!empty($team1Points) && !empty($team2Points) && $team2Points != $team1Points){
-				
+		if(!empty($team1Points) && !empty($team2Points) || $team2Points != $team1Points){
 			if($team1Points > $team2Points){
 				$teamId = $team1Id;
 			}else{
 				$teamId = $team2Id;
 			}
 			
+			
 			$this->Tour_model->advance_team($teamId, $position); 
-			$this->Tour_model->update_points($team1Points, $team1Id);
-			$this->Tour_model->update_points($team2Points, $team2Id);
+			$this->Tour_model->update_points($team1Points, $match1Id);
+			$this->Tour_model->update_points($team2Points, $match2Id);
 		}
 		$current+=2;
-		if($current < ($base*2)){
-			$this->match_stats($bracketId, $base, $current);
+		if(($current+1) < ($base*2)){
+			$this->match_stats($bracketId, $base, $current, $fill);
 		}else{
+			/*echo '<pre>';
+			print_r($fill);
+			echo '</pre>';*/
 			redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 		}
 	} 

@@ -1,6 +1,7 @@
 <?php
-echo '<div id="tournamentWrapper">';
+
 $this->load->view('tabs');
+echo '<div id="main">';
 if(!empty($tournament[0])){
 	foreach($tournament[0] as $tourindex => $bracketInfo){
 		if
@@ -54,7 +55,19 @@ if(!empty($tournament[0])){
 					echo '
 					</table>
 				</div>';
+			echo '<div class="choicePanel">';
 			
+				echo
+				'
+					<a href="'.base_url().'home/apply_to_tournament/'.$bracketInfo['id'].'" class="apply">Ansök till turneringen</a>
+				';
+			if(!empty($userdata['logged_in']) && $userdata['logged_in'] == true && $userdata['authority'] == 5){
+				
+				//echo '<a href="'.base_url().'admin/edit_tournament/'.$bracketInfo['id'].'">Editera turnering</a>';
+				echo '<a class="settings" href="'.base_url().'admin/supervise_tournament/'.$bracketInfo['id'].'">Administrera turnering</a>';
+				//echo '<a class="delete" href="'.base_url().'admin/delete_tournament/'.$bracketInfo['id'].'">Ta bort turnering</a>';
+			}
+			echo '</div>';
 			if($tourindex != 0){
 				echo '<div class="bracketHolder arena'.$bracketInfo['arena'].'">';
 			}else{
@@ -64,7 +77,7 @@ if(!empty($tournament[0])){
 			echo '<div id="tournament"';
 			if(!empty($bracketInfo['special_image'])){
 				echo 'style="background: url(\'';
-				echo base_url().'img/'.$bracketInfo['special_image'];
+				echo base_url().'images/'.$bracketInfo['special_image'];
 				echo '\')"';
 			}
 			echo '>';
@@ -91,7 +104,7 @@ if(!empty($tournament[0])){
 						if($e == 1){
 							echo (($playerMargin*(pow(2,($i-1))+0.5))+($playerHeight*((pow(2, ($i-1))-0.5))));
 						}else{
-							echo (($playerMargin*(pow(2, $i)-0.8))+($playerHeight*(pow(2, $i)-0.8)));
+							echo (($playerMargin*(pow(2, $i)-0.75))+($playerHeight*(pow(2, $i)-0.8)));
 						}
 					}
 					echo 'px;">';
@@ -103,7 +116,7 @@ if(!empty($tournament[0])){
 							if(!empty($tournament[1][$tourindex]) && $tournament[1][$tourindex][$index]['position'] == ($base+$e)){
 								echo 
 								'
-									<p style="font: '.(48/$colo).'px Helvetica, Arial, sans-serif">'.$tournament[1][$tourindex][$index]['name'].'</p>
+									<a href="'.base_url().'home/team/'.$tournament[1][$tourindex][$index]['id'].'">'.$tournament[1][$tourindex][$index]['name'].'</a>
 								';
 								
 								if(!empty($tournament[1][$tourindex][$index]['points']) && 20 <= (240/pow(2,($colo-2)))){
@@ -140,25 +153,10 @@ if(!empty($tournament[0])){
 			}
 			
 		}
-		echo '</div>';
-		echo
-		'
-			<div id="tourFooter">
-		';
-		if(!empty($userdata['logged_in']) && $userdata['logged_in'] == true){
-			echo
-			'
-				<a href="'.base_url().'home/apply_to_tournament/'.$bracketInfo['id'].'">Ansök till turneringen</a>
-			';
-			if($userdata['authority'] == 5){
-				//echo '<a href="'.base_url().'admin/edit_tournament/'.$bracketInfo['id'].'">Editera turnering</a>';
-				echo '<a class="supervise" href="'.base_url().'admin/supervise_tournament/'.$bracketInfo['id'].'">Administrera turnering</a>';
-				//echo '<a class="delete" href="'.base_url().'admin/delete_tournament/'.$bracketInfo['id'].'">Ta bort turnering</a>';
-			}
-		}
-		echo
-		'
-			</div>
+		echo '</div>
+		<div class="choicePanelReverse">
+			<a href="'.base_url().'home/apply_to_tournament/'.$bracketInfo['id'].'" class="apply">Ansök till turneringen</a>
+		</div>
 			<div id="teamApply">
 			
 		';
@@ -172,19 +170,23 @@ if(!empty($tournament[0])){
 				echo '<a href="'.base_url().'home/team/'.$teamInfo['id'].'">'.$teamInfo['name'].' </a>';
 			}
 		}
-		
-		echo '</div>';
-		
-		echo '</div>';
+
+		 echo 
+		 '
+			</div>
+		</div>
+		';
 	}
 }else{
 	echo 
 	'
-		<p>Inga LAN aktiva</p>
-		<p>Spana in tidigare turneringar <a href="'.base_url().'home/events">här</a></p>
+		<p>Just nu pågår inget LAN men du kan komma åt tidigare LAN och tillhörade turneringar genom att klicka<a href="'.base_url().'home/events">HÄR</a></p>
+		<a class="promo" href="'.base_url().'home/tournament/2"><img src="'.base_url().'images/next.jpg" /></a>
+	
 	';
-	
-	
+	//echo img('nextlan.jpg');	
+	//
 }
-echo '</div>';
+echo '</div>
+		';
 

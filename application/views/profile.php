@@ -1,9 +1,8 @@
-<div id="profileContainer">
+<div id="main">
 	<div id="profilesidebar">
 	<img src="../img/profiles/123.jpg" class="profileImg" />
 	</div>
 	<div id="profilemain">
-		<h1><?php echo '<a href="'.base_url().'home/edit_profile/'.$userdata['id'].'">Editera profil</a>'; ?></h1>
 		<p>Username: <?php echo $userdata['username'] ?></p>
 		<p>Email: <?php //echo $userdata['email'] ?></p>
 		<p>Name: <?php echo $userdata['name'] ?></p>
@@ -11,10 +10,74 @@
 		<?php 
 		if($teams){
 			foreach($teams as $index => $team) {
-				echo '<a href="'.base_url().'home/team/'.$team['id'].'">'.$team['name'].'</a><a class="cross delete" href="'.base_url().'home/leave_team/'.$team['id'].'"></a>';
+				/*echo '<a href="'.base_url().'home/team/'.$team['id'].'">'.$team['name'].'</a><a class="cross delete" href="'.base_url().'home/leave_team/'.$team['id'].'"></a>';*/
 			}
 		}
-		echo '<a href="#">'.$userdata['username'].'</a>';
+		echo '<a href="#">'.$userdata['username'].'</a>'; ?>
+		
+		<?php
+		/*echo 
+				'
+					<table class="stats">
+						<tr>
+							<td>Du är inloggad som: </td>
+							<td>'.$this->session->userdata('username').'</td>
+						</tr>
+						<tr>
+							<td>Vunna matcher: </td>
+							<td>';
+								if(!empty($matchWins)){
+									echo $matchWins.' vunna matcher';
+								}
+								
+							echo '</td>
+						</tr>';
+						
+						<tr>
+							<td>Vunna turneringar: </td>
+							<td>';
+								if(!empty($tourWins)){
+									echo $tourWins.' vunna matcher';
+								}
+							echo '</td>
+						</tr>
+						echo '
+					</table>
+					<table class="stats">
+						<tr>
+							<td>Ansökanden: </td>
+							<td>';
+							if(!empty($applys)){
+								echo $applys.'st obesvarade ansökningar';
+							}
+							echo
+							'</td>
+						</tr>
+						<tr>
+							<td>Förfrågningar: </td>
+							<td>';
+							if(!empty($teamRequest)){
+								$teams = count($teamRequest[0][0]);
+								echo 
+								'
+									<a href="'.base_url().'home/profile">'.($teams/2).' lag och '.$teams.' förfrågningar </a>
+								';
+							}
+							
+							echo'
+							</td>
+						</tr>
+						<tr>
+							<td>Invites: </td>
+							<td>';
+								if(!empty($invites)){
+									echo $invites.'st osvarde invites';
+								}
+								
+							echo ' </td>
+						</tr>
+					</table>
+				';*/
 		?> 
 		</p>
 		<p>Born: <?php echo ''; ?></p>
@@ -27,6 +90,7 @@
 		
 		
 		?>
+		<?php echo '<a class="edit" href="'.base_url().'home/edit_profile/'.$userdata['id'].'">Editera profil</a><br>'; ?>
 		<div id="requestBox">
 			<?php
 				if(!empty($teamRequest)){

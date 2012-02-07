@@ -39,6 +39,19 @@ class Tour_model extends CI_Model {
 		}
 	}
 	
+	function delete_applied_team($teamId, $bracketId){
+		$where = array
+		(
+			'position' => 0,
+			'team_id' => $teamId,
+			'bracket_id' => $bracketId, 
+		);
+		if($this->delete('team__attend__bracket', $where)){
+			return $bracketId;
+		}
+		
+	}
+	
 	//Update tournament
 	function undo_team_position($matchId, $bracketId){
 		$data = array
@@ -363,7 +376,7 @@ class Tour_model extends CI_Model {
 		$result = $query->result_array();	
 		return $this->result_contain($result);
 	}
-		
+	
 	function get_applied_teams($bracketId){
 		$join = array
 		(
@@ -421,14 +434,22 @@ class Tour_model extends CI_Model {
 	
 	
 	//Fetch all active brackets
-	function get_active_brackets(){
+	function get_brackets($lanId = null){
 		//how to get to sqls own NOW for optimization
 		$this->load->helper('date');
-		$where = array
-		(
-			'lan.start_time <'=> mdate('%Y-%m-%d %H:%m:%i',now()),
-			'lan.end_time >' => mdate('%Y-%m-%d %H:%m:%i', now()),
-		);
+		
+		if($lanId == null){
+			$where = array
+			(
+				'lan.start_time <'=> mdate('%Y-%m-%d %H:%m:%i',now()),
+				'lan.end_time >' => mdate('%Y-%m-%d %H:%m:%i', now()),
+			);
+		}else{
+			$where = array
+			(
+				'lan.id' => $lanId,
+			);
+		}
 		
 		$join = array
 		(
@@ -442,17 +463,24 @@ class Tour_model extends CI_Model {
 		return $this->result_contain($result);	
 	}
 	
-	function get_game_name(){
+	function get_game_name($lanId = null){
 		$join = array
 		(
 			'bracket' => 'bracket.lan_id = lan.id',
 			'game' => 'game.id = bracket.game_id',
 		);
-		$where = array
-		(
-			'lan.start_time <' => date('Y-m-dd H:i:s'),
-			'lan.end_time >' => date('Y-m-dd H:i:s'),
-		);
+		if($lanId == null){
+			$where = array
+			(
+				'lan.start_time <' => date('Y-m-dd H:i:s'),
+				'lan.end_time >' => date('Y-m-dd H:i:s'),
+			);
+		}else{
+			$where = array
+			(
+				'lan.id' => $lanId,
+			);
+		}
 		
 		$this->join('game.name, bracket.id, bracket.arena', 'lan', $join, $where, 1);
 		$this->db->order_by('arena', 'ASC');
@@ -505,6 +533,61 @@ class Tour_model extends CI_Model {
 		return false;
 	}
 	
+	function sign_up_guest_to_bracket($guestName){
+		$data = array
+		(
+			'username' => $guestName,
+		);
+		if($this->result_check($this->insert('user', $data))){
+			$userId = $this->db->insert_id();
+			$data = array
+			(
+				'name' => $guestName
+			);
+			
+			if($this->result_check($this->insert('team', $data))){
+				$teamId = $this->db->insert_id();
+				$data = array
+				(
+					'user_id' => $userId,
+					'team_id' => $teamId,
+					'player' => 1,
+					'active' => 1,
+					'officer' => 1,
+				);
+				if($this->result_check($this->insert('user__register__team', $data))){
+					$bracketId = $this->input->post('tourBracketId');
+					
+					$join = array
+					(
+						'team' => 'team.id = team__attend__bracket.team_id',
+					);
+					$where = array
+					(
+						'team_id' => $teamId,
+						'bracket_id' => $bracketId,
+					);
+					$result = $this->join('*', 'team__attend__bracket', $join, $where);
+					
+					$result = $this->result_contain($result); 
+					
+					if(empty($result)){
+						$data = array
+						(
+							'team_id' => $teamId,
+							'bracket_id' => $bracketId,
+							'position' => 0,
+							 
+						);
+						$result = $this->insert('team__attend__bracket', $data);
+						return $this->result_contain($result);
+					}
+					return false;
+				}
+			}
+		}
+	}
+	
 	function edit_tournament($bracketId){
 		$sql =
 		'
@@ -522,6 +605,11 @@ class Tour_model extends CI_Model {
 			return true;
 		}
 		return false;
+	}
+	
+	function get_all_admin_data(){
+		$brackets = $this->get_all('bracket');
+		
 	}
 	
 	//General functions

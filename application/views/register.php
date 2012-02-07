@@ -2,7 +2,7 @@
 
 echo 
 '
-<div id="regform">
+<div id="main">
 	<h3>Registrera ny användare</h3>
 	<form action="'.base_url().'home/create_login" method="post" id="regForm">
 		<label for="regusername">Username: </label>
@@ -33,4 +33,5 @@ echo
 		<br>	
 	</form>
 </div>
+
 ';
