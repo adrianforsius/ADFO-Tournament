@@ -401,13 +401,14 @@ a:hover{
 	margin: 5px 10px;
 }
 
-.bracketHolder{
+.tournamentBox{
 	display: none;
 }
 
 #tabs{
 	/*background:	url('../images/lfbg.png');*/
-	margin: 0;
+	margin: 20px 0 0 0;
+	height: 40px;
 }
 #control{
 	float: left;
@@ -677,17 +678,18 @@ a:hover{
 }
 
 #content #tabs li{
-	margin: 0;
+	float: left;
+	margin: 0 0 0 20px;
 	padding: 10px 10px;
 	background: grey;
 	color: white;
-	float: left;
 	line-height: 20px;
 	font-size: 20px;
 }
 #content #tabs .show{
 	background: black;
 	color: white;
+	float: left;
 }
 
 #tourApplyForm{
@@ -697,9 +699,9 @@ a:hover{
 	color: #FFF68F;	
 }
 .tournamentInfo{
-	display: none;
 	width: 960px;
 	background: url('../images/bg.jpg') repeat-x 100%;
+	padding: 20px 0px;
 }
 .tabTable{
 	font: 16px helvetica;
@@ -763,7 +765,7 @@ tr td{
 	width: 225px;
 }
 .pageHolder{
-	width: 900px;
+	width: 960px;
 	height: 230px;
 }
 .pagination{
@@ -862,4 +864,13 @@ tr td{
 }
 #main{
 	background-color: #262626;
+	padding-top: 20px;
+}
+.post{
+	margin: 0 0 20px 0;
+}
+.stage{
+	background-color: black;
+	width: 960px;
+	height: 4px;
 }

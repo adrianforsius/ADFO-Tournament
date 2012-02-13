@@ -13,21 +13,20 @@ $(function(){
 		return answer // answer is a boolean
 	});  
 	
-	arena = $(".tabNavigation li").attr('title');
-	$("#"+arena+"Tournament").fadeIn(2000);
+	arena = $("#tabs li").attr('value');
 	updateBoard(arena);
 	
-	$(".tabNavigation li").click(function(){
-		$('.bracketHolder').removeClass('current');
-		$('.tournamentInfo').removeClass('current');
-		$(".tabNavigation li").removeClass("show");
+	$("#tabs li").click(function(){
+		$('.tournamentBox').removeClass('current');
+		$("#tabs li").removeClass("show");
 		$(this).addClass("show");
 		arena = $(this).attr('value');
 		$('.arena'+arena).addClass('current');
-		$('.tourInfo'+arena).addClass('current');
+		$('.arena'+arena+' #tournament').hide();
 		updateBoard(arena);
-		$("#tournament").fadeIn(2000);
+		$('.arena'+arena+' #tournament').fadeIn(2000);
 	});
+	
 	
 	
 	//updateBoard();

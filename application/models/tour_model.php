@@ -612,7 +612,9 @@ class Tour_model extends CI_Model {
 		
 	}
 	
-	//General functions
+	/*
+	 * General functions to improve the Active record already provided by Codeigniter.
+	 */
 	function insert($table, $data){
 		$result = $this->db->insert($table, $data);
 		return $this->result_check($result);

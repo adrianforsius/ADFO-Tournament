@@ -1,3 +1,5 @@
 <h1>Error!</h1>
 <?php
-echo '<p>'.$message.'</p>';
+if(!empty($message)){
+	echo '<p>'.$message.'</p>';
+}

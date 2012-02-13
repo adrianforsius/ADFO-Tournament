@@ -3,9 +3,9 @@
 	<img src="../img/profiles/123.jpg" class="profileImg" />
 	</div>
 	<div id="profilemain">
-		<p>Username: <?php echo $userdata['username'] ?></p>
+		<p>Användarnamn: <?php echo $userdata['username'] ?></p>
 		<p>Email: <?php //echo $userdata['email'] ?></p>
-		<p>Name: <?php echo $userdata['name'] ?></p>
+		<p>Namn: <?php echo $userdata['name'] ?></p>
 		<p>Teams:
 		<?php 
 		if($teams){
@@ -13,9 +13,9 @@
 				/*echo '<a href="'.base_url().'home/team/'.$team['id'].'">'.$team['name'].'</a><a class="cross delete" href="'.base_url().'home/leave_team/'.$team['id'].'"></a>';*/
 			}
 		}
-		echo '<a href="#">'.$userdata['username'].'</a>'; ?>
-		
-		<?php
+		echo ' Denna featuren är under utveckling';
+		echo '<p>Turneringsstatestik: Denna featuren är under utveckling</p>';
+	
 		/*echo 
 				'
 					<table class="stats">

@@ -13,7 +13,7 @@ echo
 '
 <div id="main"> 
 	<div class="pageHolder">
-	<div class="page">
+		<div class="page">
 ';
 $count = 0;
 foreach($data as $record => $user){
@@ -26,7 +26,7 @@ foreach($data as $record => $user){
 	}
 	echo 
 	'
-		<a href="'.base_url().'home/user/'.$user['id'].'">'.$user['username'].'</a>
+		<a href="'.base_url().'home/spelare/'.$user['id'].'">'.$user['username'].'</a>
 		<br>	
 	';
 	$count++;

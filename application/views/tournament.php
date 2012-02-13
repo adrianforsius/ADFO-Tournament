@@ -1,8 +1,7 @@
 <?php
-
-$this->load->view('tabs');
 echo '<div id="main">';
 if(!empty($tournament[0])){
+	$this->load->view('tabs');
 	foreach($tournament[0] as $tourindex => $bracketInfo){
 		if
 		(
@@ -12,14 +11,22 @@ if(!empty($tournament[0])){
 			$bracketInfo['size'] == 16 ||   
 			$bracketInfo['size'] == 32  
 		){
+	
 			if($tourindex != 0){
-				echo '<div class="tournamentInfo tourInfo'.$bracketInfo['arena'].'">';
+				echo 
+				'
+				<div class="tournamentBox arena'.$bracketInfo['arena'].'">
+				';
 			}else{
-				echo '<div class="tournamentInfo current tourInfo'.$bracketInfo['arena'].'">';
+				echo 
+				'
+				<div class="tournamentBox arena'.$bracketInfo['arena'].' current">
+				';
 			}
-			
+				
 			echo
 			'
+				<div class="tournamentInfo tourInfo'.$bracketInfo['arena'].'">
 					<table class="tabTable">
 						<tr>
 							<td>Name: </td>
@@ -59,7 +66,7 @@ if(!empty($tournament[0])){
 			
 				echo
 				'
-					<a href="'.base_url().'home/apply_to_tournament/'.$bracketInfo['id'].'" class="apply">Ansök till turneringen</a>
+					<a href="'.base_url().'home/apply_to_tournament/'.$bracketInfo['id'].'" class="apply">Anmäl mig till turneringen</a>
 				';
 			if(!empty($userdata['logged_in']) && $userdata['logged_in'] == true && $userdata['authority'] == 5){
 				
@@ -154,16 +161,16 @@ if(!empty($tournament[0])){
 			
 		}
 		echo '</div>
-		<div class="choicePanelReverse">
-			<a href="'.base_url().'home/apply_to_tournament/'.$bracketInfo['id'].'" class="apply">Ansök till turneringen</a>
-		</div>
+		<div class="choicePanelReverse">';
+			//<a href="'.base_url().'home/apply_to_tournament/'.$bracketInfo['id'].'" class="apply">Ansök till turneringen</a>
+		echo'</div>
 			<div id="teamApply">
 			
 		';
 		if(!empty($tournament[2][$tourindex])){
 			echo 
 			'
-				<h3>Ansökande lag</h3>
+				<h3>Anmälda/väntar på placering</h3>
 			';
 			
 			foreach($tournament[2][$tourindex] as $teamInfoIndex => $teamInfo){
@@ -175,18 +182,14 @@ if(!empty($tournament[0])){
 		 '
 			</div>
 		</div>
+		</div>
 		';
 	}
 }else{
-	echo 
-	'
-		<p>Just nu pågår inget LAN men du kan komma åt tidigare LAN och tillhörade turneringar genom att klicka<a href="'.base_url().'home/events">HÄR</a></p>
-		<a class="promo" href="'.base_url().'home/tournament/2"><img src="'.base_url().'images/next.jpg" /></a>
-	
-	';
-	//echo img('nextlan.jpg');	
+
 	//
 }
 echo '</div>
+	
 		';
 

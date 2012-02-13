@@ -5,55 +5,82 @@ class Home extends CI_Controller {
 		$this->load->model('Tour_model');
 	}
 	
-	//?? cannot use scalar value as an array $data['check'] = 0
 	public function index(){
-		$this->tournament();
+		$data['lan'] = $this->Tour_model->get_active_lan();
+		$data['view'] = 'home';
+		$data['events'] = $this->Tour_model->get_all('lan');
+		$data['crumbs'] = $this->crumbs();
+		$data['ccrumbs'] = $this->breadcrumb->makeURL();
+		//$this->tournament();
+		$this->load->view('index', $data);
 	}
 	
 	public function userRedirect($data){
 		$data['userdata'] = $this->Tour_model->session_manager();
-		$data['lan'] = $this->Tour_model->get_active_lan();
+		$data['crumbs'] = $this->crumbs();
+		$data['ccrumbs'] = $this->breadcrumb->makeURL();
 		$this->load->view('index', $data);
 	}
 	
-	public function error($message){
+	public function error($message = null){
 		$data['view'] = 'error';
 		$data['message'] = $message;
+		$data['crumbs'] = $this->crumbs();
+		$data['ccrumbs'] = $this->breadcrumb->makeURL();
 		$this->load->view('index', $data);
+	}
+	
+	/*
+	 * Function to call the breadcrumbs class included in the libraries.
+	 * This is to locate where the user are at all times.
+	 * General pages or subpages or non-nagivatable pages are removed. 
+	 */
+	public function crumbs(){
+		foreach($this->uri->segment_array() as $index => $crumb){
+			if($index != 1){	
+				if($crumb == 'page' || $crumb == 'apply_to_tournament'){
+					
+				}else{
+					$this->breadcrumb->addCrumb($crumb, $crumb);
+				}
+			}
+		}
+		return $this->breadcrumb->makeHTML();
 	}
 	
 	/****************** LOAD VIEWS ******************/
 	
-	public function tournament($lanId = null){
+	public function lan($lanId = null){
 		if($lanId != null){
 			$brackets = $this->Tour_model->get_brackets($lanId);
-		}else{
-			$brackets = $this->Tour_model->get_brackets();
-		}
-		$appliedTeams = array();
-		$teams = array();
 		
-		//subquery solution optional
-		if(!empty($brackets)){
-			foreach($brackets as $index => $bracket){
-				$teams[] = $this->Tour_model->get_team_by_bracket_id($bracket['id']);
-				$appliedTeams[] = $this->Tour_model->get_applied_teams($bracket['id']);
+			$appliedTeams = array();
+			$teams = array();
+			
+			//subquery solution optional
+			if(!empty($brackets)){
+				foreach($brackets as $index => $bracket){
+					$teams[] = $this->Tour_model->get_team_by_bracket_id($bracket['id']);
+					$appliedTeams[] = $this->Tour_model->get_applied_teams($bracket['id']);
+				}
 			}
+			$data['tournament'] = array($brackets, $teams, $appliedTeams);
+			$data['gamename'] = $this->Tour_model->get_game_name($lanId);
+			$data['view'] = 'tournament';
+		}else{
+			$data['events'] = $this->Tour_model->get_all('lan');
+			$data['view'] = 'events';
 		}
-		$data['tournament'] = array($brackets, $teams, $appliedTeams);
-		$data['gamename'] = $this->Tour_model->get_game_name($lanId);
-		$data['view'] = 'tournament';
 		$this->userRedirect($data);
 	}
  
 	public function page($view){
+		if($view == 'page'){
+			redirect('home/tournament');
+		}
 		$data['view'] = $view;
-		$this->load->view('index', $data);
-	}
-	
-	public function events(){
-		$data['view'] = 'events';
-		$data['events'] = $this->Tour_model->get_all('lan');
+		$data['ccrumbs'] = $this->breadcrumb->makeURL;
+		$data['crumbs'] = $this->crumbs();
 		$this->load->view('index', $data);
 	}
 	
@@ -64,49 +91,23 @@ class Home extends CI_Controller {
 		$this->load->view('index', $data);
 	}
 	
-	public function user($id){
-		$data['view'] = 'user';
-		if($this->Tour_model->session_manager('logged_in') && $this->Tour_model->session_manager('id') == $id){
-			$this->profile();
-			/*
-			$matchWins = $this->Tour_model->get_match_wins();
-			if($matchWins){
-				$matches = 0;
-				foreach($matchWins as $i => $match){
-					$matches+= $match['amount'];
-					$matches--;
-				}
-				$data['matchWins'] = $matches;
-			}
-			 $teams = $this->Tour_model->get_officer_teams();
-			if($teams){
-				$teamRequest = array();
-				foreach($teams as $i => $team){
-					$users = $this->Tour_model->get_applicants_for_team($team['id']);
-					if($users){
-						$team[] = $users;
-						$teamRequest[] = $team;
-					}
-				}
-				if($teamRequest){
-					$data['teamRequest'] = $teamRequest;
-				}
-			}*/
+	public function spelare($id = null){
+		if($id == null){
+			$config['base_url'] = base_url().'home/uers';
+			$config['total_rows'] = $this->db->count_all('user');
+			$config['per_page'] = 40;
+			$this->pagination->initialize($config);
+			$data['data'] = $this->Tour_model->get_all_pagination('user', $config['per_page'], $this->uri->segment(3));
+			$data['pagination'] = $this->pagination->create_links();
+			$data['view'] = 'users';
+			$this->userRedirect($data);
+		}else if($this->Tour_model->session_manager('logged_in') && $this->Tour_model->session_manager('id') == $id){
+			$this->profil();
 		}else{
+			$data['view'] = 'user';
 			$data['data'] = $this->Tour_model->get_item_by_id('user', $id);
-			$this->load->view('index', $data);
+			$this->userRedirect($data);
 		}
-	}
-	
-	public function users(){
-		$config['base_url'] = base_url().'home/uers';
-		$config['total_rows'] = $this->db->count_all('user');
-		$config['per_page'] = 40;
-		$this->pagination->initialize($config);
-		$data['data'] = $this->Tour_model->get_all_pagination('user', $config['per_page'], $this->uri->segment(3));
-		$data['pagination'] = $this->pagination->create_links();
-		$data['view'] = 'users';
-		$this->userRedirect($data);
 	}
 	
 	public function team($id){
@@ -142,15 +143,13 @@ class Home extends CI_Controller {
 		$this->userRedirect($data);
 	}
 	
-	
-	//under construction
 	public function invite($userId){
 		$data['userInfo'] = $this->Tour_model->get_item_by_id('user', $userId);
 		$data['view'] = 'invite';
 		$this->userRedirect($data);
 	}
 	
-	public function profile(){
+	public function profil(){
 		$this->logged_in();
 		$data['teamInvite'] = $this->Tour_model->get_team_invites();
 		$data['userdata'] = $this->Tour_model->session_manager();
@@ -277,7 +276,7 @@ class Home extends CI_Controller {
 		}else if($this->Tour_model->session_manager('logged_in')){
 			return;
 		}
-		$this->error('Unable to check if logged in');
+		redirect('home/error', 'refresh');
 	}
 	
 	
@@ -345,7 +344,10 @@ class Home extends CI_Controller {
 		}else if($this->input->post('logoutsubmit')){
 			$this->logout();
 		}
-		redirect('/home/tournament/', 'refresh');
+		$crumbs = $this->input->post('crumbs');
+		
+		//print_r($crumbs);
+		redirect($crumbs, 'refresh');
 	}
 	
 	//Login with validation
@@ -378,6 +380,5 @@ class Home extends CI_Controller {
 	//Logout
 	function logout() {
 		$this->simplelogin->logout();
-		redirect('home/tournament', 'refresh');
 	}
 }

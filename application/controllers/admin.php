@@ -138,6 +138,10 @@ class Admin extends CI_Controller {
 		redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 	}
 	
+	/*
+	 * Recursive function to loop tru a tournament and the matchpoints independent of its size.
+	 * Fetching values from the first contestant in everymatch comparing it to his competitor,
+	 */ 
 	function match_stats($bracketId, $base, $current = 1, $fill = array()){
 		$this->is_admin();
 		
@@ -175,9 +179,6 @@ class Admin extends CI_Controller {
 		if(($current+1) < ($base*2)){
 			$this->match_stats($bracketId, $base, $current, $fill);
 		}else{
-			/*echo '<pre>';
-			print_r($fill);
-			echo '</pre>';*/
 			redirect('admin/supervise_tournament/'.$bracketId, 'refresh');
 		}
 	} 

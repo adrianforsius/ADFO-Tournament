@@ -1,8 +1,8 @@
 <?php
 echo 
 '
-	<div id="tournamentWrapper">
-		<p>Username: '.$data['nick'].'</p>
+	<div id="main">
+		<p>Username: '.$data['username'].'</p>
 		<p>Name: '.$data['name'].'</p>
 		<p>Last name: '.$data['lastname'].'</p>
 		<p>Profile picture: </p>	

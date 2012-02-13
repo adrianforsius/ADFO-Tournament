@@ -18,6 +18,7 @@
 	echo 
 	'
 		</div>
+		<a href="'.base_url().'home">
 		<div id="headerImg">
 			<h1 id="headerText">';
 			if(!empty($lan[0]['name'])){ 
@@ -25,12 +26,13 @@
 			}
 		echo '</h1>
 		</div>
+		</a>
 		 
 	
 	<div id="nav">
-		<a href="'.base_url().'home/tournament">Hem</a>
-		<a href="'.base_url().'home/users">Spelare</a>
-		<a href="'.base_url().'home/events">Andra LAN</a>
+		<a href="'.base_url().'home">Hem</a>
+		<a href="'.base_url().'home/spelare">Spelare</a>
+		<a href="'.base_url().'home/lan">LAN</a>
 		
 	
 	';
@@ -52,7 +54,7 @@
 				<a href="'.base_url().'home/actions/register_team">Skapa nytt lag</a>';
 		*/
 		echo '
-				<a href="'.base_url().'home/profile">Min profil</a>
+				<a href="'.base_url().'home/profil">Min profil</a>
 		';
 		//ska modellen hämta informationen via controllen eller ska den skickas med direkt till kontrollen som ovanför?, user fråga, säkerhetsfråga	
 	}else{
@@ -66,6 +68,7 @@
 		'
 			<form action="'.base_url().'home/loginsubmit" method="post" id="loginForm">
 				<input type="submit" name="logoutsubmit" class="lineBtn" value ="logout" />
+				<input type="hidden" name="crumbs" value="'.$ccrumbs.'" />
 			</form>
 			<table class="lineTable">
 				<tr>
@@ -80,10 +83,11 @@
 		'
 			<form id="loginForm" method="post" action="'.base_url().'home/loginsubmit">
 				<input class="lineBtn" type="submit" name="loginsubmit" value="login" />
-				<label for="username">Username:</label>
+				<label for="username">Användarnamn:</label>
 				<input type="text" name="username" />		
-				<label for="password">Password:</label>
+				<label for="password">Lösenord:</label>
 				<input type="password" name="password" />
+				<input type="hidden" name="crumbs" value="'.$ccrumbs.'" />
 			</form>
 		';
 	}
@@ -92,4 +96,5 @@
 		</div>
 		<div id="content">
 	';
-		
+	echo $crumbs;
+	echo '<div class="stage"></div>';
